@@ -8,8 +8,8 @@
   --color-candle: #e8c987;
   --color-text: #e7ddd0;
   --color-text-dim: #9b8f86;
-  --font-display: 'Georgia', 'Times New Roman', serif;
-  --font-body: 'Georgia', 'Times New Roman', serif;
+  --font-display: 'Cinzel', 'Georgia', 'Times New Roman', serif;
+  --font-body: 'EB Garamond', 'Georgia', 'Times New Roman', serif;
 
   color-scheme: dark;
   color: var(--color-text);
@@ -32,4 +32,13 @@ body,
 
 body {
   background: radial-gradient(ellipse at top, #1a1019 0%, var(--color-bg) 55%, var(--color-bg-deep) 100%);
+  font-size: 1.05rem;
+}
+
+/* Reduce motion for players who prefer it. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
 }

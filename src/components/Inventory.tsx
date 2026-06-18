@@ -52,6 +52,8 @@ export function Inventory() {
           })}
         </ul>
       )}
+
+      <p className="inventory__save">Progress saves automatically.</p>
     </aside>
   )
 }

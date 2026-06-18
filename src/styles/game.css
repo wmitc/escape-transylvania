@@ -79,6 +79,23 @@
   overflow: hidden;
 }
 
+/* Candlelit vignette + a slow flicker over the whole scene for ambiance. */
+.scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+  animation: candle-flicker 5s ease-in-out infinite;
+}
+
+@keyframes candle-flicker {
+  0%, 100% { opacity: 0.85; }
+  45% { opacity: 1; }
+  55% { opacity: 0.78; }
+  70% { opacity: 0.92; }
+}
+
 .scene-title {
   margin: 0 0 0.35rem;
   font-family: var(--font-display);
@@ -179,6 +196,16 @@
   color: var(--color-text-dim);
   font-style: italic;
   font-size: 0.9rem;
+}
+
+.inventory__save {
+  margin: 1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(192, 57, 43, 0.2);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: rgba(155, 143, 134, 0.7);
+  text-align: center;
 }
 
 .inventory__list {
@@ -402,4 +429,39 @@
   opacity: 0.4;
   cursor: default;
   border-color: rgba(120, 200, 120, 0.6);
+}
+
+/* --- Hints --- */
+.hint__button {
+  margin-top: 1rem;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed rgba(232, 201, 135, 0.5);
+  border-radius: 6px;
+  color: var(--color-candle);
+  font-family: var(--font-body);
+  font-style: italic;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.hint__button:hover {
+  background: rgba(232, 201, 135, 0.1);
+}
+
+.hint {
+  margin: 1rem 0 0;
+  padding: 0.7rem 0.9rem;
+  background: rgba(232, 201, 135, 0.08);
+  border-left: 3px solid var(--color-candle);
+  border-radius: 4px;
+  color: var(--color-text);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.hint__label {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--color-candle);
 }
