@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { ExitHotspot, HotspotId, ItemId, PuzzleId, RoomId } from '../types'
 import { ITEMS } from '../data/items'
 import { STARTING_ROOM_ID } from '../data/rooms'
+import { PUZZLES } from '../data/puzzles'
 
 /** Which top-level screen the game is on. */
 export type GamePhase = 'intro' | 'playing' | 'won'
@@ -19,6 +20,8 @@ interface GameState {
   flags: Record<string, boolean>
   /** Item currently selected for "use on hotspot" interactions. */
   selectedItemId: ItemId | null
+  /** Puzzle whose panel is currently open, if any. */
+  activePuzzleId: PuzzleId | null
   /** Transient feedback line shown to the player. */
   message: string | null
 
@@ -28,7 +31,8 @@ interface GameState {
   collectItem: (hotspotId: HotspotId, itemId: ItemId, description: string) => void
   tryExit: (exit: ExitHotspot) => void
   look: (description: string) => void
-  openPuzzle: (puzzleId: PuzzleId, description: string) => void
+  openPuzzle: (puzzleId: PuzzleId) => void
+  closePuzzle: () => void
   solvePuzzle: (puzzleId: PuzzleId, rewardItemIds?: ItemId[], flag?: string) => void
   selectItem: (itemId: ItemId | null) => void
   setFlag: (flag: string, value?: boolean) => void
@@ -45,6 +49,7 @@ const initialState = {
   solvedPuzzles: [] as PuzzleId[],
   flags: {} as Record<string, boolean>,
   selectedItemId: null as ItemId | null,
+  activePuzzleId: null as PuzzleId | null,
   message: null as string | null,
 }
 
@@ -91,10 +96,23 @@ export const useGameStore = create<GameState>()(
 
       look: (description) => set({ message: description }),
 
-      // Placeholder until interactive puzzle UIs are added. For now, inspecting a
-      // puzzle hotspot just narrates it.
-      openPuzzle: (_puzzleId, description) =>
-        set({ message: `${description} (This puzzle is not built yet.)` }),
+      openPuzzle: (puzzleId) => {
+        const state = get()
+        const puzzle = PUZZLES[puzzleId]
+        if (!puzzle) return
+        if (state.solvedPuzzles.includes(puzzleId)) {
+          set({ message: 'You have already solved this.' })
+          return
+        }
+        // Some puzzles can't be attempted without the right item in hand.
+        if (puzzle.requiresItemId && !state.inventory.includes(puzzle.requiresItemId)) {
+          set({ message: puzzle.requiresItemMessage ?? 'You are missing something needed here.' })
+          return
+        }
+        set({ activePuzzleId: puzzleId, message: null })
+      },
+
+      closePuzzle: () => set({ activePuzzleId: null }),
 
       solvePuzzle: (puzzleId, rewardItemIds = [], flag) =>
         set((state) => {

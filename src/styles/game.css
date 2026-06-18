@@ -220,3 +220,186 @@
 .inventory__name {
   font-size: 0.9rem;
 }
+
+/* --- Puzzle modal --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgba(3, 2, 4, 0.8);
+  backdrop-filter: blur(2px);
+  z-index: 50;
+}
+
+.modal-panel {
+  position: relative;
+  width: min(32rem, 100%);
+  background: linear-gradient(180deg, #1f1726, #120d18);
+  border: 1px solid var(--color-blood);
+  border-radius: 12px;
+  padding: 1.75rem;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(192, 57, 43, 0.5);
+  background: transparent;
+  color: var(--color-text-dim);
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  background: var(--color-blood);
+  color: var(--color-text);
+}
+
+.modal-title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  color: var(--color-candle);
+}
+
+.modal-prompt {
+  margin: 0 0 1.25rem;
+  color: var(--color-text-dim);
+  line-height: 1.6;
+}
+
+.modal-reward {
+  margin: 1.25rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-dim);
+  text-align: center;
+}
+
+.puzzle__error {
+  color: var(--color-blood-bright);
+  font-style: italic;
+  margin: 0.75rem 0 0;
+}
+
+.puzzle__progress {
+  margin: 0.75rem 0 0;
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.puzzle__submit {
+  margin-top: 1.25rem;
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--color-candle);
+  background: transparent;
+  border: 1px solid var(--color-blood);
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}
+
+.puzzle__submit:hover {
+  background: var(--color-blood);
+  color: var(--color-text);
+}
+
+/* Combination lock */
+.dials {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.dial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.dial__btn {
+  background: transparent;
+  border: none;
+  color: var(--color-candle);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dial__value {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  width: 2.75rem;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-radius: 6px;
+}
+
+/* Cipher */
+.cipher__text {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  color: var(--color-candle);
+  margin: 0 0 1rem;
+}
+
+.cipher__input {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  font-size: 1.1rem;
+  text-align: center;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  color: var(--color-text);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-radius: 6px;
+}
+
+/* Matching */
+.match-grid {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+}
+
+.match-col {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.match-token {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.8rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.match-token.is-selected {
+  border-color: var(--color-candle);
+  box-shadow: 0 0 10px rgba(232, 201, 135, 0.5);
+}
+
+.match-token.is-matched {
+  opacity: 0.4;
+  cursor: default;
+  border-color: rgba(120, 200, 120, 0.6);
+}

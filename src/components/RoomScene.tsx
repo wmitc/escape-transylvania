@@ -2,12 +2,14 @@ import { useGameStore } from '../state/gameStore'
 import { ROOMS } from '../data/rooms'
 import type { Hotspot as HotspotType } from '../types'
 import { Hotspot } from './Hotspot'
+import { PuzzleModal } from './PuzzleModal'
 
-/** Hotspots the player should currently see (collected items vanish; flag-gated
- * items stay hidden until their flag is set). */
+/** Hotspots the player should currently see: collected items vanish, solved
+ * puzzles vanish, and flag-gated items stay hidden until their flag is set. */
 function visibleHotspots(
   hotspots: HotspotType[],
   collected: string[],
+  solvedPuzzles: string[],
   flags: Record<string, boolean>,
 ): HotspotType[] {
   return hotspots.filter((h) => {
@@ -15,6 +17,7 @@ function visibleHotspots(
       if (collected.includes(h.id)) return false
       if (h.requiresFlag && !flags[h.requiresFlag]) return false
     }
+    if (h.type === 'puzzle' && solvedPuzzles.includes(h.puzzleId)) return false
     return true
   })
 }
@@ -26,11 +29,13 @@ function visibleHotspots(
 export function RoomScene() {
   const currentRoomId = useGameStore((s) => s.currentRoomId)
   const collectedHotspots = useGameStore((s) => s.collectedHotspots)
+  const solvedPuzzles = useGameStore((s) => s.solvedPuzzles)
   const flags = useGameStore((s) => s.flags)
   const message = useGameStore((s) => s.message)
+  const activePuzzleId = useGameStore((s) => s.activePuzzleId)
 
   const room = ROOMS[currentRoomId]
-  const hotspots = visibleHotspots(room.hotspots, collectedHotspots, flags)
+  const hotspots = visibleHotspots(room.hotspots, collectedHotspots, solvedPuzzles, flags)
 
   return (
     <section className="scene-wrap" aria-label={room.name}>
@@ -46,6 +51,7 @@ export function RoomScene() {
           {message ?? ' '}
         </p>
       </div>
+      {activePuzzleId && <PuzzleModal puzzleId={activePuzzleId} />}
     </section>
   )
 }

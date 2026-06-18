@@ -65,7 +65,7 @@ export const ROOMS: Record<RoomId, Room> = {
     background: 'radial-gradient(ellipse at 50% 40%, #2c2418 0%, #181308 60%, #0a0805 100%)',
     hotspots: [
       { id: 'library-shelves', type: 'look', label: 'Bookshelves', icon: '📚', x: 20, y: 35,
-        description: 'Endless spines, none in a language you know — except a few marked symbols.' },
+        description: 'A margin note repeats: "to read the Count\'s hand, walk each letter three steps back."' },
       { id: 'library-book', type: 'item', label: 'Open Tome', icon: '📕', x: 50, y: 60,
         itemId: 'book', description: 'You take the leather tome. Its margins crawl with cipher symbols.' },
       { id: 'library-cipher', type: 'puzzle', label: 'Cipher Lectern', icon: '🔣', x: 72, y: 45,
@@ -84,7 +84,7 @@ export const ROOMS: Record<RoomId, Room> = {
     background: 'radial-gradient(ellipse at 50% 45%, #16302a 0%, #0c1c18 60%, #06100d 100%)',
     hotspots: [
       { id: 'lab-cauldron', type: 'look', label: 'Bubbling Cauldron', icon: '🌫️', x: 28, y: 55,
-        description: 'A cauldron froths an unhealthy green. Bubbles pop into little screaming shapes.' },
+        description: 'A recipe is scrawled on the cauldron: "three bats, seven moons, a single drop of blood."' },
       { id: 'lab-vial', type: 'item', label: 'Crimson Vial', icon: '🧪', x: 50, y: 38,
         itemId: 'vial', description: 'You pocket a vial of dark crimson liquid. It is warm.' },
       { id: 'lab-cabinet', type: 'puzzle', label: 'Locked Cabinet', icon: '🗄️', x: 74, y: 50,
