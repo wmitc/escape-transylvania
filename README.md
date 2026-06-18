@@ -25,6 +25,8 @@ Other scripts:
 npm run build    # type-check and produce a production build in dist/
 npm run preview  # serve the production build locally to verify it
 npm run lint     # type-check without emitting files
+npm test         # run the test suite once (Vitest)
+npm run test:watch  # run tests in watch mode while developing
 ```
 
 > **New to this?** `npm run dev` is all you need day to day. Edit a file under `src/`, save,
@@ -46,10 +48,26 @@ src/
 ## Roadmap
 
 1. ✅ **Bootstrap** — project scaffold + gothic title screen.
-2. **Game engine** — data-driven rooms, inventory, navigation (the full castle skeleton).
-3. **Puzzles & keys** — puzzle panels, item use, collect 3 keys to unlock the gate.
-4. **Hints & polish** — hint system, save/reset, intro & win screens, styling pass.
-5. **CI & deploy** — automated tests and GitHub Pages deployment.
+2. ✅ **Game engine** — data-driven rooms, inventory, navigation (the full castle skeleton).
+3. ✅ **Puzzles & keys** — puzzle panels, item use, collect 3 keys to unlock the gate.
+4. ✅ **Hints & polish** — hint system, save/reset, intro & win screens, styling pass.
+5. ✅ **CI & deploy** — automated tests and GitHub Pages deployment.
+
+## Testing
+
+Logic is covered by [Vitest](https://vitest.dev) + Testing Library: the game store
+(item pickup, solving puzzles, key-gated exits, the win condition), puzzle-data
+integrity, and a puzzle component. Run `npm test`.
+
+## Deployment
+
+Every push to `main` runs **CI** (`.github/workflows/ci.yml`: type-check, test, build)
+and, if green, **deploys** to GitHub Pages (`.github/workflows/deploy.yml`).
+
+> **One-time setup:** in the repo, go to **Settings → Pages → Build and deployment**
+> and set **Source** to **GitHub Actions**. The site then publishes to
+> `https://wmitc.github.io/escape-transylvania/` (the Vite `base` path is already
+> configured for this subpath).
 
 ## How the game is structured
 
