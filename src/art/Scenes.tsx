@@ -150,6 +150,17 @@ function GreatHallScene() {
           ))}
         </g>
       ))}
+      {/* pinned alchemist's note on the wall (the lab combination clue) */}
+      <g transform="rotate(-4 96 112)">
+        <rect x="84" y="98" width="24" height="30" fill="#d8c8a8" stroke="#b8a888" strokeWidth="1" />
+        <circle cx="96" cy="100" r="2" fill="#8b1e2d" />
+        <g stroke="#6a5a3a" strokeWidth="1" opacity="0.7">
+          <line x1="88" y1="106" x2="104" y2="106" />
+          <line x1="88" y1="111" x2="104" y2="111" />
+          <line x1="88" y1="116" x2="100" y2="116" />
+          <line x1="88" y1="121" x2="104" y2="121" />
+        </g>
+      </g>
       {/* checkered floor */}
       <g>
         <rect x="0" y="150" width="320" height="30" fill="#1a120c" />

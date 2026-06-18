@@ -45,7 +45,7 @@ export const ROOMS: Record<RoomId, Room> = {
     hotspots: [
       { id: 'hall-portrait', type: 'look', label: 'Portrait of the Count', icon: '🖼️', x: 50, y: 22,
         description: 'Dracula stares down, pale and amused. The eyes seem to follow you.' },
-      { id: 'hall-recipe', type: 'look', label: "Alchemist's Note", icon: '📜', x: 24, y: 40,
+      { id: 'hall-recipe', type: 'look', label: "Alchemist's Note", icon: '📜', x: 30, y: 62,
         description:
           'A note is pinned to the wall in a spidery hand: "For the cabinet — three bats, ' +
           'seven moons, a single drop of blood."' },

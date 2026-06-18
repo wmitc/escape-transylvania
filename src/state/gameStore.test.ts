@@ -79,10 +79,3 @@ describe('tryExit (the castle gate)', () => {
     expect(store().phase).toBe('won')
   })
 })
-
-describe('persistence shape', () => {
-  it('keeps revealed hints', () => {
-    store().revealHint('cell-lock')
-    expect(store().hintsRevealed['cell-lock']).toBe(true)
-  })
-})

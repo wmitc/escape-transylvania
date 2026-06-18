@@ -29,7 +29,7 @@ export function IntroScreen() {
         <p className="footnote">
           {hasProgress
             ? 'Your progress is saved in this browser.'
-            : 'Stuck on a puzzle? A hint is always one click away.'}
+            : 'Every clue you need is hidden in the castle. Explore carefully.'}
         </p>
       </main>
     </div>

@@ -37,9 +37,7 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
       aria-label={hotspot.label}
       title={hotspot.label}
     >
-      <span className="hotspot__icon" aria-hidden="true">
-        {hotspot.icon}
-      </span>
+      <span className="hotspot__marker" aria-hidden="true" />
       <span className="hotspot__label">{hotspot.label}</span>
     </button>
   )

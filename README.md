@@ -40,7 +40,7 @@ src/
   main.tsx         app entry point
   App.tsx          root component
   styles/          global + component CSS (gothic theme tokens live in global.css)
-  data/            game content: rooms, items, puzzles, hints   (added in later PRs)
+  data/            game content: rooms, items, puzzles
   state/           Zustand game store                            (added in later PRs)
   components/       RoomScene, Hotspot, Inventory, etc.          (added in later PRs)
 ```
@@ -50,7 +50,7 @@ src/
 1. ✅ **Bootstrap** — project scaffold + gothic title screen.
 2. ✅ **Game engine** — data-driven rooms, inventory, navigation (the full castle skeleton).
 3. ✅ **Puzzles & keys** — puzzle panels, item use, collect 3 keys to unlock the gate.
-4. ✅ **Hints & polish** — hint system, save/reset, intro & win screens, styling pass.
+4. ✅ **Polish** — save/reset, intro & win screens, gothic styling pass.
 5. ✅ **CI & deploy** — automated tests and GitHub Pages deployment.
 
 ## Testing

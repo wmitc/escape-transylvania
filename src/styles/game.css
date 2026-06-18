@@ -126,41 +126,81 @@
   font-style: italic;
 }
 
-/* --- Hotspots --- */
+/* --- Hotspots ---
+ * Subtle pulsing markers that signal "interactive here" without obscuring the
+ * painted scene; the label appears on hover/focus. Exits read as doorways
+ * (red tint + a small chevron). */
 .hotspot {
   position: absolute;
   z-index: 2;
+  width: 30px;
+  height: 30px;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
   background: transparent;
   border: none;
   cursor: pointer;
   color: var(--color-text);
 }
 
-.hotspot__icon {
-  font-size: 2rem;
-  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.9));
-  transition: transform 0.15s ease, filter 0.15s ease;
+.hotspot__marker {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(232, 201, 135, 0.85);
+  background: radial-gradient(circle, rgba(232, 201, 135, 0.5), rgba(232, 201, 135, 0) 70%);
+  box-shadow: 0 0 8px rgba(232, 201, 135, 0.45);
+  animation: hotspot-pulse 2.4s ease-in-out infinite;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.hotspot:hover .hotspot__icon,
-.hotspot:focus-visible .hotspot__icon {
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 10px var(--color-candle));
+@keyframes hotspot-pulse {
+  0%, 100% { transform: scale(0.82); opacity: 0.65; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+.hotspot:hover .hotspot__marker,
+.hotspot:focus-visible .hotspot__marker {
+  transform: scale(1.35);
+  box-shadow: 0 0 14px rgba(232, 201, 135, 0.9);
+  animation-play-state: paused;
+}
+
+/* Exits: blood-red tint with a forward chevron. */
+.hotspot--exit .hotspot__marker {
+  position: relative;
+  border-color: rgba(224, 90, 78, 0.9);
+  background: radial-gradient(circle, rgba(192, 57, 43, 0.5), rgba(192, 57, 43, 0) 70%);
+  box-shadow: 0 0 8px rgba(192, 57, 43, 0.55);
+}
+
+.hotspot--exit .hotspot__marker::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-top: 2px solid rgba(240, 217, 160, 0.95);
+  border-right: 2px solid rgba(240, 217, 160, 0.95);
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
 .hotspot__label {
-  font-size: 0.7rem;
-  letter-spacing: 0.05em;
-  padding: 0.1rem 0.4rem;
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-3px);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 0.12rem 0.45rem;
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(8, 5, 10, 0.85);
+  border: 1px solid rgba(232, 201, 135, 0.25);
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -168,10 +208,7 @@
 .hotspot:hover .hotspot__label,
 .hotspot:focus-visible .hotspot__label {
   opacity: 1;
-}
-
-.hotspot--exit .hotspot__icon {
-  filter: drop-shadow(0 0 8px var(--color-blood-bright));
+  transform: translateX(-50%) translateY(0);
 }
 
 /* --- Inventory --- */
@@ -441,39 +478,4 @@
   opacity: 0.4;
   cursor: default;
   border-color: rgba(120, 200, 120, 0.6);
-}
-
-/* --- Hints --- */
-.hint__button {
-  margin-top: 1rem;
-  width: 100%;
-  background: transparent;
-  border: 1px dashed rgba(232, 201, 135, 0.5);
-  border-radius: 6px;
-  color: var(--color-candle);
-  font-family: var(--font-body);
-  font-style: italic;
-  padding: 0.5rem;
-  cursor: pointer;
-}
-
-.hint__button:hover {
-  background: rgba(232, 201, 135, 0.1);
-}
-
-.hint {
-  margin: 1rem 0 0;
-  padding: 0.7rem 0.9rem;
-  background: rgba(232, 201, 135, 0.08);
-  border-left: 3px solid var(--color-candle);
-  border-radius: 4px;
-  color: var(--color-text);
-  font-style: italic;
-  line-height: 1.5;
-}
-
-.hint__label {
-  font-style: normal;
-  font-weight: 700;
-  color: var(--color-candle);
 }
