@@ -3,6 +3,7 @@ import { ROOMS } from '../data/rooms'
 import type { Hotspot as HotspotType } from '../types'
 import { Hotspot } from './Hotspot'
 import { PuzzleModal } from './PuzzleModal'
+import { SCENE_ART } from '../art/Scenes'
 
 /** Hotspots the player should currently see: collected items vanish, solved
  * puzzles vanish, and flag-gated items stay hidden until their flag is set. */
@@ -36,10 +37,12 @@ export function RoomScene() {
 
   const room = ROOMS[currentRoomId]
   const hotspots = visibleHotspots(room.hotspots, collectedHotspots, solvedPuzzles, flags)
+  const SceneArt = SCENE_ART[currentRoomId]
 
   return (
     <section className="scene-wrap" aria-label={room.name}>
       <div className="scene" style={{ background: room.background }}>
+        {SceneArt && <SceneArt />}
         {hotspots.map((h) => (
           <Hotspot key={h.id} hotspot={h} />
         ))}
