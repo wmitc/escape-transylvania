@@ -31,6 +31,7 @@ export type Hotspot =
   | LookHotspot
   | ItemHotspot
   | PuzzleHotspot
+  | KeyholeHotspot
   | ExitHotspot
 
 interface HotspotBase {
@@ -65,6 +66,15 @@ export interface PuzzleHotspot extends HotspotBase {
   description: string
 }
 
+/** A lock that accepts one specific key. Inserting it sets `placedFlag`. */
+export interface KeyholeHotspot extends HotspotBase {
+  type: 'keyhole'
+  /** The key item that fits this hole. */
+  keyItemId: ItemId
+  /** Flag set once the key is inserted. */
+  placedFlag: string
+}
+
 /** Moves the player to another room, optionally gated by a condition. */
 export interface ExitHotspot extends HotspotBase {
   type: 'exit'
@@ -73,6 +83,8 @@ export interface ExitHotspot extends HotspotBase {
   lockedMessage?: string
   /** Exit is locked until this flag is true. */
   requiresFlag?: string
+  /** Exit is locked until all of these flags are true. */
+  requiresFlags?: string[]
   /** Exit is locked until the player holds every one of these key item ids. */
   requiresKeys?: ItemId[]
   /** Reaching this exit wins the game rather than entering a room. */

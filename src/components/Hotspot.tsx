@@ -7,9 +7,13 @@ import { useGameStore } from '../state/gameStore'
  */
 export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
   const collectItem = useGameStore((s) => s.collectItem)
+  const insertKey = useGameStore((s) => s.insertKey)
   const tryExit = useGameStore((s) => s.tryExit)
   const look = useGameStore((s) => s.look)
   const openPuzzle = useGameStore((s) => s.openPuzzle)
+  const filled = useGameStore((s) =>
+    hotspot.type === 'keyhole' ? !!s.flags[hotspot.placedFlag] : false,
+  )
 
   function handleClick() {
     switch (hotspot.type) {
@@ -22,6 +26,9 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
       case 'puzzle':
         openPuzzle(hotspot.puzzleId)
         break
+      case 'keyhole':
+        insertKey(hotspot.keyItemId, hotspot.placedFlag)
+        break
       case 'exit':
         tryExit(hotspot)
         break
@@ -31,14 +38,14 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
   return (
     <button
       type="button"
-      className={`hotspot hotspot--${hotspot.type}`}
+      className={`hotspot hotspot--${hotspot.type}${filled ? ' is-filled' : ''}`}
       style={{ left: `${hotspot.x}%`, top: `${hotspot.y}%` }}
       onClick={handleClick}
       aria-label={hotspot.label}
       title={hotspot.label}
     >
       <span className="hotspot__marker" aria-hidden="true" />
-      <span className="hotspot__label">{hotspot.label}</span>
+      <span className="hotspot__label">{filled ? `${hotspot.label} ✓` : hotspot.label}</span>
     </button>
   )
 }

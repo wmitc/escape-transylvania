@@ -52,5 +52,18 @@ export const ITEMS: Record<ItemId, Item> = {
   },
 }
 
+/**
+ * The three locks on the castle gate: which key fits each, and the flag set
+ * once it is inserted. The gate opens only when all three flags are set.
+ */
+export const KEY_HOLES: { keyItemId: ItemId; placedFlag: string }[] = [
+  { keyItemId: 'iron-key', placedFlag: 'iron-set' },
+  { keyItemId: 'silver-key', placedFlag: 'silver-set' },
+  { keyItemId: 'bone-key', placedFlag: 'bone-set' },
+]
+
 /** The keys required to open the castle gate, in narrative order. */
-export const REQUIRED_KEYS: ItemId[] = ['iron-key', 'silver-key', 'bone-key']
+export const REQUIRED_KEYS: ItemId[] = KEY_HOLES.map((h) => h.keyItemId)
+
+/** The flags set when each key is placed; the gate opens when all are true. */
+export const KEY_SET_FLAGS: string[] = KEY_HOLES.map((h) => h.placedFlag)

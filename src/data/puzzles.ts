@@ -92,8 +92,8 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     type: 'combination',
     title: 'The Locked Cabinet',
     prompt:
-      'A three-dial combination lock holds the cabinet shut. The alchemist must have ' +
-      'written the numbers down somewhere — perhaps elsewhere in the castle.',
+      'A three-dial combination lock holds the cabinet shut. The numbers are on the ' +
+      "alchemist's note pinned in the Great Hall.",
     length: 3,
     solution: '371',
     rewardItemId: 'bone-key',
