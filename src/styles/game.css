@@ -188,6 +188,19 @@
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
+/* Keyholes: gold ring that fills solid once its key is set. */
+.hotspot--keyhole .hotspot__marker {
+  border-color: rgba(232, 201, 135, 0.9);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.35));
+}
+
+.hotspot.is-filled .hotspot__marker {
+  border-color: var(--color-candle);
+  background: radial-gradient(circle, rgba(232, 201, 135, 0.95), rgba(232, 201, 135, 0.35));
+  box-shadow: 0 0 14px rgba(232, 201, 135, 0.9);
+  animation: none;
+}
+
 .hotspot__label {
   position: absolute;
   top: calc(100% - 2px);

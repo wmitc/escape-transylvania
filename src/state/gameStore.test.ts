@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { useGameStore } from './gameStore'
-import { REQUIRED_KEYS } from '../data/items'
+import { REQUIRED_KEYS, KEY_HOLES, KEY_SET_FLAGS } from '../data/items'
 import type { ExitHotspot } from '../types'
 
 const store = () => useGameStore.getState()
@@ -8,14 +8,14 @@ const store = () => useGameStore.getState()
 const escapeExit: ExitHotspot = {
   id: 'gate-escape',
   type: 'exit',
-  label: 'Unlock the Gate',
+  label: 'Open the Gate',
   icon: '🔓',
   x: 50,
-  y: 70,
+  y: 84,
   targetRoomId: 'escaped',
   isEscape: true,
-  requiresKeys: REQUIRED_KEYS,
-  lockedMessage: 'The three locks hold fast.',
+  requiresFlags: KEY_SET_FLAGS,
+  lockedMessage: 'The doors hold fast. Set all three keys first.',
 }
 
 beforeEach(() => {
@@ -64,17 +64,44 @@ describe('openPuzzle', () => {
   })
 })
 
+describe('insertKey', () => {
+  it("won't insert a key you don't hold", () => {
+    store().insertKey('iron-key', 'iron-set')
+    expect(store().flags['iron-set']).toBeFalsy()
+    expect(store().message).toMatch(/don't have/i)
+  })
+
+  it('moves a held key from the satchel into the lock', () => {
+    store().solvePuzzle('p', ['iron-key'])
+    store().insertKey('iron-key', 'iron-set')
+    expect(store().flags['iron-set']).toBe(true)
+    expect(store().inventory).not.toContain('iron-key')
+  })
+
+  it('will not re-insert a key already set', () => {
+    store().solvePuzzle('p', ['iron-key'])
+    store().insertKey('iron-key', 'iron-set')
+    store().insertKey('iron-key', 'iron-set')
+    expect(store().message).toMatch(/already set/i)
+  })
+})
+
 describe('tryExit (the castle gate)', () => {
   beforeEach(() => store().startGame())
 
-  it('stays locked without all three keys', () => {
+  it('stays locked until every key is set in its keyhole', () => {
+    // Holding the keys is not enough anymore — they must be inserted.
+    REQUIRED_KEYS.forEach((key, i) => store().solvePuzzle(`p${i}`, [key]))
     store().tryExit(escapeExit)
     expect(store().phase).toBe('playing')
-    expect(store().message).toBe('The three locks hold fast.')
+    expect(store().message).toMatch(/hold fast/i)
   })
 
-  it('wins once all three keys are held', () => {
-    REQUIRED_KEYS.forEach((key, i) => store().solvePuzzle(`p${i}`, [key]))
+  it('wins once all three keys are set', () => {
+    KEY_HOLES.forEach(({ keyItemId, placedFlag }, i) => {
+      store().solvePuzzle(`p${i}`, [keyItemId])
+      store().insertKey(keyItemId, placedFlag)
+    })
     store().tryExit(escapeExit)
     expect(store().phase).toBe('won')
   })

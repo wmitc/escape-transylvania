@@ -29,6 +29,7 @@ interface GameState {
   startGame: () => void
   enterRoom: (roomId: RoomId) => void
   collectItem: (hotspotId: HotspotId, itemId: ItemId, description: string) => void
+  insertKey: (keyItemId: ItemId, placedFlag: string) => void
   tryExit: (exit: ExitHotspot) => void
   look: (description: string) => void
   openPuzzle: (puzzleId: PuzzleId) => void
@@ -75,11 +76,34 @@ export const useGameStore = create<GameState>()(
           }
         }),
 
+      // Insert a key into its keyhole. The key must be in the inventory; once
+      // placed it leaves the satchel and sets the keyhole's flag.
+      insertKey: (keyItemId, placedFlag) =>
+        set((state) => {
+          const key = ITEMS[keyItemId]
+          if (state.flags[placedFlag]) {
+            return { message: `The ${key?.name ?? 'key'} is already set in the lock.` }
+          }
+          if (!state.inventory.includes(keyItemId)) {
+            return { message: `You don't have the ${key?.name ?? 'right key'} yet.` }
+          }
+          return {
+            inventory: state.inventory.filter((i) => i !== keyItemId),
+            flags: { ...state.flags, [placedFlag]: true },
+            selectedItemId: state.selectedItemId === keyItemId ? null : state.selectedItemId,
+            message: `You set the ${key?.name ?? 'key'} into the lock. It turns with a heavy clunk.`,
+          }
+        }),
+
       tryExit: (exit) => {
         const state = get()
 
         if (exit.requiresFlag && !state.flags[exit.requiresFlag]) {
           set({ message: exit.lockedMessage ?? 'It will not budge.' })
+          return
+        }
+        if (exit.requiresFlags && !exit.requiresFlags.every((f) => state.flags[f])) {
+          set({ message: exit.lockedMessage ?? 'It is locked.' })
           return
         }
         if (exit.requiresKeys && !exit.requiresKeys.every((k) => state.inventory.includes(k))) {

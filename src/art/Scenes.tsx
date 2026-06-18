@@ -1,5 +1,25 @@
 import type { ReactElement } from 'react'
 import type { RoomId } from '../types'
+import { useGameStore } from '../state/gameStore'
+
+/** An arched doorway opening, used as the visible target for exit hotspots. */
+function Archway({ cx, top = 104 }: { cx: number; top?: number }) {
+  const w = 24
+  return (
+    <g>
+      <path
+        d={`M${cx - w} 180 V${top} q0 -22 ${w} -22 q${w} 0 ${w} 22 V180 z`}
+        fill="#080510"
+        stroke="#2a2030"
+        strokeWidth="2.5"
+      />
+      <path
+        d={`M${cx - w + 5} 180 V${top + 3} q0 -17 ${w - 5} -17 q${w - 5} 0 ${w - 5} 17 V180 z`}
+        fill="#05030a"
+      />
+    </g>
+  )
+}
 
 /**
  * Hand-drawn gothic scene art, one SVG per room. These are the room
@@ -116,56 +136,49 @@ function GreatHallScene() {
         </linearGradient>
       </defs>
       <rect width="320" height="180" fill="url(#gh-wall)" />
-      {/* arched alcoves along the back wall */}
-      <g fill="#120d0a" stroke="#2a1d12" strokeWidth="2">
-        {[20, 250].map((x) => (
-          <path key={x} d={`M${x} 70 q25 -34 50 0 v70 h-50 z`} />
-        ))}
-      </g>
+      {/* four archway passages — one per exit (dungeon, library, lab, gate) */}
+      <Archway cx={38} />
+      <Archway cx={115} />
+      <Archway cx={205} />
+      <Archway cx={282} />
       {/* grand portrait, centre */}
       <g>
-        <rect x="126" y="28" width="68" height="86" rx="2" fill="#1a1018" stroke="#b8954f" strokeWidth="4" />
-        <rect x="134" y="36" width="52" height="70" fill="#241526" />
-        <circle cx="160" cy="62" r="14" fill="#cdbfae" />
-        <path d="M146 110 q14 -42 28 0 z" fill="#11060e" />
-        <path d="M150 60 q10 -16 20 0 q-10 6 -20 0 z" fill="#0c0510" />
+        <rect x="126" y="22" width="68" height="80" rx="2" fill="#1a1018" stroke="#b8954f" strokeWidth="4" />
+        <rect x="134" y="30" width="52" height="64" fill="#241526" />
+        <circle cx="160" cy="54" r="13" fill="#cdbfae" />
+        <path d="M147 98 q13 -40 26 0 z" fill="#11060e" />
+        <path d="M150 52 q10 -16 20 0 q-10 6 -20 0 z" fill="#0c0510" />
       </g>
       {/* two hanging banners with a crest */}
       {[70, 250].map((x) => (
         <g key={x}>
-          <path d={`M${x - 16} 18 h32 v74 l-16 12 l-16 -12 z`} fill="url(#gh-banner)" />
-          <path d={`M${x} 44 l7 7 l-7 7 l-7 -7 z`} fill="#e8c987" opacity="0.85" />
+          <path d={`M${x - 15} 12 h30 v60 l-15 11 l-15 -11 z`} fill="url(#gh-banner)" />
+          <path d={`M${x} 34 l6 6 l-6 6 l-6 -6 z`} fill="#e8c987" opacity="0.85" />
         </g>
       ))}
-      {/* candelabra */}
-      {[40, 280].map((x) => (
+      {/* wall sconces flanking the portrait */}
+      {[100, 220].map((x) => (
         <g key={x}>
-          <rect x={x - 2} y="120" width="4" height="40" fill="#b8954f" />
-          <rect x={x - 14} y="116" width="28" height="5" rx="2" fill="#b8954f" />
-          {[-12, 0, 12].map((dx) => (
-            <g key={dx}>
-              <rect x={x + dx - 1.5} y="104" width="3" height="14" fill="#e8d9b0" />
-              <path d={`M${x + dx} 96 q-4 5 0 9 q4 -4 0 -9 z`} fill="#f7d97a" />
-            </g>
-          ))}
+          <rect x={x - 1.5} y="60" width="3" height="12" fill="#b8954f" />
+          <path d={`M${x} 52 q-4 5 0 9 q4 -4 0 -9 z`} fill="#f7d97a" />
         </g>
       ))}
       {/* pinned alchemist's note on the wall (the lab combination clue) */}
-      <g transform="rotate(-4 96 112)">
-        <rect x="84" y="98" width="24" height="30" fill="#d8c8a8" stroke="#b8a888" strokeWidth="1" />
-        <circle cx="96" cy="100" r="2" fill="#8b1e2d" />
+      <g transform="rotate(-4 88 70)">
+        <rect x="76" y="56" width="24" height="30" fill="#d8c8a8" stroke="#b8a888" strokeWidth="1" />
+        <circle cx="88" cy="58" r="2" fill="#8b1e2d" />
         <g stroke="#6a5a3a" strokeWidth="1" opacity="0.7">
-          <line x1="88" y1="106" x2="104" y2="106" />
-          <line x1="88" y1="111" x2="104" y2="111" />
-          <line x1="88" y1="116" x2="100" y2="116" />
-          <line x1="88" y1="121" x2="104" y2="121" />
+          <line x1="80" y1="64" x2="96" y2="64" />
+          <line x1="80" y1="69" x2="96" y2="69" />
+          <line x1="80" y1="74" x2="92" y2="74" />
+          <line x1="80" y1="79" x2="96" y2="79" />
         </g>
       </g>
       {/* checkered floor */}
       <g>
-        <rect x="0" y="150" width="320" height="30" fill="#1a120c" />
+        <rect x="0" y="160" width="320" height="20" fill="#1a120c" />
         {Array.from({ length: 16 }, (_, i) => (
-          <rect key={i} x={i * 20} y="150" width="20" height="30" fill={i % 2 ? '#241710' : '#0e0908'} />
+          <rect key={i} x={i * 20} y="160" width="20" height="20" fill={i % 2 ? '#241710' : '#0e0908'} />
         ))}
       </g>
     </svg>
@@ -182,8 +195,8 @@ function LibraryScene() {
         </linearGradient>
       </defs>
       <rect width="320" height="180" fill="url(#lib-wall)" />
-      {/* tall bookshelves left and right */}
-      {[8, 248].map((bx) => (
+      {/* tall bookshelf on the left */}
+      {[8].map((bx) => (
         <g key={bx}>
           <rect x={bx} y="10" width="64" height="150" fill="#241a10" stroke="#3b2a1c" strokeWidth="3" />
           {[18, 46, 74, 102, 130].map((sy) => (
@@ -206,15 +219,32 @@ function LibraryScene() {
           ))}
         </g>
       ))}
+      {/* doorway out, on the right */}
+      <Archway cx={286} />
+      {/* a short wall shelf above the doorway keeps the library feel */}
+      <g>
+        <rect x="238" y="58" width="68" height="4" fill="#3b2a1c" />
+        {Array.from({ length: 9 }, (_, i) => {
+          const colors = ['#6a2230', '#3a5a3a', '#5a4a8a', '#7a6326', '#883322']
+          return (
+            <rect key={i} x={242 + i * 7} y={40 + (i % 3)} width="5.5" height={18 - (i % 3) * 2}
+              fill={colors[(i + 2) % colors.length]} />
+          )
+        })}
+      </g>
       {/* arched window with moonlight, centre-back */}
       <path d="M138 18 q22 -22 44 0 v54 h-44 z" fill="#11203a" stroke="#3b2a1c" strokeWidth="3" />
       <g stroke="#243a5a" strokeWidth="2">
         <line x1="160" y1="10" x2="160" y2="72" />
         <line x1="138" y1="44" x2="182" y2="44" />
       </g>
-      {/* lectern with open tome and a candle */}
+      {/* lectern with open tome, a locked drawer, and a candle */}
       <g>
         <path d="M150 150 l20 0 l8 -34 l-36 0 z" fill="#3b2a1c" stroke="#5a3f28" strokeWidth="2" />
+        {/* locked drawer (the cipher) */}
+        <rect x="151" y="130" width="18" height="12" rx="1" fill="#2a1d12" stroke="#5a3f28" strokeWidth="1.5" />
+        <circle cx="160" cy="136" r="1.6" fill="#b8954f" />
+        {/* sloped reading surface + open book */}
         <path d="M140 112 l40 0 l-4 10 l-32 0 z" fill="#5a3f28" />
         <path d="M141 113 q19 -6 19 0 q0 -6 19 0 l-3 7 q-16 -5 -16 0 q0 -5 -16 0 z" fill="#d8c8a8" />
         <line x1="160" y1="111" x2="160" y2="120" stroke="#3b2a1c" strokeWidth="1.5" />
@@ -223,7 +253,7 @@ function LibraryScene() {
         <path d="M188 100 q-4 5 0 9 q4 -4 0 -9 z" fill="#f7d97a" />
       </g>
       {/* floor */}
-      <rect x="0" y="156" width="320" height="24" fill="#0a0805" />
+      <rect x="0" y="160" width="320" height="20" fill="#0a0805" />
     </svg>
   )
 }
@@ -243,6 +273,8 @@ function AlchemyLabScene() {
       </defs>
       <rect width="320" height="180" fill="url(#lab-wall)" />
       <StoneCourses fill="#000" opacity={0.22} />
+      {/* doorway out, lower left */}
+      <Archway cx={28} />
       {/* shelf of bottles, upper left */}
       <g>
         <rect x="20" y="46" width="96" height="5" fill="#3b2a1c" />
@@ -268,11 +300,14 @@ function AlchemyLabScene() {
         <circle cx="98" cy="95" r="2" fill="#bff5d0" opacity="0.7" />
         <circle cx="90" cy="92" r="2.4" fill="#bff5d0" opacity="0.6" />
       </g>
-      {/* alembic / flasks on a table, centre */}
+      {/* alembic / flasks + the crimson vial on a table, centre */}
       <g>
-        <rect x="150" y="120" width="70" height="6" fill="#3b2a1c" />
-        <path d="M170 96 l0 12 l-7 12 a9 9 0 0 0 14 0 l-7 -12 l0 -12 z" fill="#aef0c8" opacity="0.55" stroke="#cfeede" strokeWidth="1.2" />
-        <path d="M196 100 l0 9 l-9 11 h18 l-9 -11 l0 -9 z" fill="#e8c987" opacity="0.5" stroke="#f0d9a0" strokeWidth="1.2" />
+        <rect x="146" y="120" width="78" height="6" fill="#3b2a1c" />
+        {/* crimson vial (the collectable) */}
+        <path d="M154 102 l0 9 l-5 9 a7 7 0 0 0 10 0 l-5 -9 l0 -9 z" fill="#c0392b" opacity="0.75" stroke="#e0796e" strokeWidth="1.1" />
+        <rect x="153" y="99" width="6" height="4" fill="#2a2230" />
+        <path d="M178 96 l0 12 l-7 12 a9 9 0 0 0 14 0 l-7 -12 l0 -12 z" fill="#aef0c8" opacity="0.55" stroke="#cfeede" strokeWidth="1.2" />
+        <path d="M204 100 l0 9 l-9 11 h18 l-9 -11 l0 -9 z" fill="#e8c987" opacity="0.5" stroke="#f0d9a0" strokeWidth="1.2" />
       </g>
       {/* locked cabinet, right */}
       <g>
@@ -288,6 +323,15 @@ function AlchemyLabScene() {
 }
 
 function GateScene() {
+  const flags = useGameStore((s) => s.flags)
+  // Each keyhole, its rim colour, the inserted-key colour, and whether it's set.
+  const holes = [
+    { x: 132, rim: '#8a8a8a', key: '#9a9aa0', set: !!flags['iron-set'] },
+    { x: 160, rim: '#d8d8e0', key: '#dadae2', set: !!flags['silver-set'] },
+    { x: 188, rim: '#e8e0c8', key: '#ece3cf', set: !!flags['bone-set'] },
+  ]
+  const allSet = holes.every((h) => h.set)
+
   return (
     <svg {...sceneProps}>
       <defs>
@@ -312,6 +356,8 @@ function GateScene() {
       {/* the great iron-banded doors */}
       <g>
         <path d="M96 180 v-78 a64 64 0 0 1 128 0 v78 z" fill="#2a1d14" />
+        {/* centre seam — glows with moonlight once all keys are set */}
+        {allSet && <rect x="157" y="42" width="6" height="138" fill="url(#gt-moon)" opacity="0.7" />}
         <line x1="160" y1="40" x2="160" y2="180" stroke="#160f0a" strokeWidth="3" />
         {/* iron bands */}
         <g fill="#4a4150">
@@ -325,15 +371,19 @@ function GateScene() {
             [96, 132, 168].map((y) => <circle key={`${x}-${y}`} cx={x} cy={y} r="2" />),
           )}
         </g>
-        {/* three keyholes: iron, silver, bone */}
-        {[
-          { x: 132, c: '#8a8a8a' },
-          { x: 160, c: '#d8d8e0' },
-          { x: 188, c: '#e8e0c8' },
-        ].map(({ x, c }) => (
+        {/* three keyholes; a key appears in each once inserted */}
+        {holes.map(({ x, rim, key, set }) => (
           <g key={x}>
-            <circle cx={x} cy="118" r="5" fill="#0a0608" stroke={c} strokeWidth="1.5" />
+            <circle cx={x} cy="118" r="5" fill="#0a0608" stroke={rim} strokeWidth="1.5" />
             <rect x={x - 1.5} y="118" width="3" height="8" fill="#0a0608" />
+            {set && (
+              <g>
+                <circle cx={x} cy="118" r="9" fill={key} opacity="0.2" />
+                <circle cx={x} cy="110" r="4" fill="none" stroke={key} strokeWidth="2.5" />
+                <rect x={x - 1} y="113" width="2" height="10" fill={key} />
+                <rect x={x - 4} y="120" width="4" height="2" fill={key} />
+              </g>
+            )}
           </g>
         ))}
       </g>

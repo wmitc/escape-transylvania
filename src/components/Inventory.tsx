@@ -1,5 +1,5 @@
 import { useGameStore } from '../state/gameStore'
-import { ITEMS, REQUIRED_KEYS } from '../data/items'
+import { ITEMS, REQUIRED_KEYS, KEY_SET_FLAGS } from '../data/items'
 
 /**
  * The player's satchel. Shows collected items (selecting one will let it be used
@@ -10,8 +10,12 @@ export function Inventory() {
   const selectedItemId = useGameStore((s) => s.selectedItemId)
   const selectItem = useGameStore((s) => s.selectItem)
   const setMessage = useGameStore((s) => s.setMessage)
+  const flags = useGameStore((s) => s.flags)
 
-  const keysHeld = inventory.filter((id) => REQUIRED_KEYS.includes(id)).length
+  // Count keys obtained, whether still carried or already set in the gate.
+  const keysHeld =
+    inventory.filter((id) => REQUIRED_KEYS.includes(id)).length +
+    KEY_SET_FLAGS.filter((f) => flags[f]).length
 
   return (
     <aside className="inventory" aria-label="Inventory">
