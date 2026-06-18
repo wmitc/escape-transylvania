@@ -66,8 +66,11 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
       { left: '🕷️', right: '🕸️' },
       { left: '⚰️', right: '💀' },
     ],
+    requiresItemId: 'rusty-nail',
+    requiresItemMessage:
+      'The lid is pinned shut. You need something thin to pry the catch — a nail, perhaps.',
     rewardItemId: 'iron-key',
-    successMessage: 'The catch springs open. Inside lies a cold Iron Key.',
+    successMessage: 'You pry the catch with the nail and it springs open. Inside lies a cold Iron Key.',
   },
 
   // Library — decode the Count's cipher using the tome (shift each letter back by 3).
@@ -86,14 +89,14 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     successMessage: 'The drawer slides open, revealing a tarnished Silver Key.',
   },
 
-  // Alchemy Lab — read the recipe scrawled on the cauldron, then dial the code.
+  // Alchemy Lab — pour the crimson vial into the cauldron to reveal the code, then dial it.
   'lab-combination': {
     id: 'lab-combination',
     type: 'combination',
     title: 'The Locked Cabinet',
     prompt:
-      'A three-dial combination lock holds the cabinet shut. The numbers are on the ' +
-      "alchemist's note pinned in the Great Hall.",
+      'A three-dial combination lock holds the cabinet shut. The numbers appear only in ' +
+      'the cauldron\'s brew — once the crimson vial is poured in.',
     length: 3,
     solution: '371',
     rewardItemId: 'bone-key',

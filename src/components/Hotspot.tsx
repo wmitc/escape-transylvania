@@ -8,6 +8,7 @@ import { useGameStore } from '../state/gameStore'
 export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
   const collectItem = useGameStore((s) => s.collectItem)
   const insertKey = useGameStore((s) => s.insertKey)
+  const applyItem = useGameStore((s) => s.applyItem)
   const tryExit = useGameStore((s) => s.tryExit)
   const look = useGameStore((s) => s.look)
   const openPuzzle = useGameStore((s) => s.openPuzzle)
@@ -28,6 +29,9 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
         break
       case 'keyhole':
         insertKey(hotspot.keyItemId, hotspot.placedFlag)
+        break
+      case 'apply':
+        applyItem(hotspot.itemId, hotspot.setsFlag, hotspot.revealMessage, hotspot.emptyDescription)
         break
       case 'exit':
         tryExit(hotspot)

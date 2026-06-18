@@ -62,6 +62,30 @@ describe('openPuzzle', () => {
     store().openPuzzle('library-cipher')
     expect(store().activePuzzleId).toBe('library-cipher')
   })
+
+  it('the dungeon lockbox needs the rusty nail', () => {
+    store().openPuzzle('cell-lock')
+    expect(store().activePuzzleId).toBeNull()
+    store().collectItem('dungeon-straw', 'rusty-nail', 'Got the nail.')
+    store().openPuzzle('cell-lock')
+    expect(store().activePuzzleId).toBe('cell-lock')
+  })
+})
+
+describe('applyItem (pour the vial into the cauldron)', () => {
+  it('does nothing useful without the vial', () => {
+    store().applyItem('vial', 'cauldron-brewed', 'reveal 371', 'you need a draught')
+    expect(store().flags['cauldron-brewed']).toBeFalsy()
+    expect(store().message).toBe('you need a draught')
+  })
+
+  it('consumes the vial and reveals the clue', () => {
+    store().collectItem('lab-vial', 'vial', 'Got the vial.')
+    store().applyItem('vial', 'cauldron-brewed', 'reveal 371', 'you need a draught')
+    expect(store().flags['cauldron-brewed']).toBe(true)
+    expect(store().inventory).not.toContain('vial')
+    expect(store().message).toBe('reveal 371')
+  })
 })
 
 describe('insertKey', () => {

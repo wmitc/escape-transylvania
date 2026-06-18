@@ -89,6 +89,26 @@
   z-index: 0;
 }
 
+/* A dark room: the art is nearly blacked out until the torch is carried. */
+.scene--dark .scene-art {
+  filter: brightness(0.05);
+}
+
+.scene-dark-note {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 0 2rem;
+  color: var(--color-text-dim);
+  font-style: italic;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+
 /* Candlelit vignette + a slow flicker over the whole scene for ambiance. */
 .scene::after {
   content: '';
