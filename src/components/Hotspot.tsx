@@ -20,7 +20,7 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
         collectItem(hotspot.id, hotspot.itemId, hotspot.description)
         break
       case 'puzzle':
-        openPuzzle(hotspot.puzzleId, hotspot.description)
+        openPuzzle(hotspot.puzzleId)
         break
       case 'exit':
         tryExit(hotspot)
