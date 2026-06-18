@@ -45,6 +45,10 @@ export const ROOMS: Record<RoomId, Room> = {
     hotspots: [
       { id: 'hall-portrait', type: 'look', label: 'Portrait of the Count', icon: '🖼️', x: 50, y: 22,
         description: 'Dracula stares down, pale and amused. The eyes seem to follow you.' },
+      { id: 'hall-recipe', type: 'look', label: "Alchemist's Note", icon: '📜', x: 24, y: 40,
+        description:
+          'A note is pinned to the wall in a spidery hand: "For the cabinet — three bats, ' +
+          'seven moons, a single drop of blood."' },
       { id: 'hall-to-dungeon', type: 'exit', label: 'Down to the Dungeon', icon: '🕳️', x: 14, y: 70,
         targetRoomId: 'dungeon' },
       { id: 'hall-to-library', type: 'exit', label: 'To the Library', icon: '📚', x: 38, y: 60,
@@ -84,7 +88,9 @@ export const ROOMS: Record<RoomId, Room> = {
     background: 'radial-gradient(ellipse at 50% 45%, #16302a 0%, #0c1c18 60%, #06100d 100%)',
     hotspots: [
       { id: 'lab-cauldron', type: 'look', label: 'Bubbling Cauldron', icon: '🌫️', x: 28, y: 55,
-        description: 'A recipe is scrawled on the cauldron: "three bats, seven moons, a single drop of blood."' },
+        description:
+          'A cauldron froths an unhealthy green; bubbles pop into little screaming shapes. ' +
+          'The recipe that once hung here is gone.' },
       { id: 'lab-vial', type: 'item', label: 'Crimson Vial', icon: '🧪', x: 50, y: 38,
         itemId: 'vial', description: 'You pocket a vial of dark crimson liquid. It is warm.' },
       { id: 'lab-cabinet', type: 'puzzle', label: 'Locked Cabinet', icon: '🗄️', x: 74, y: 50,
