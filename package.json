@@ -1,0 +1,25 @@
+{
+  "name": "escape-transylvania",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Escape Transylvania — a browser-based point-and-click escape room. Solve puzzles to escape Dracula's castle.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "lint": "tsc -b --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  }
+}

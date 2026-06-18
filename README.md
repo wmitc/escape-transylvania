@@ -1,0 +1,63 @@
+# 🦇 Escape Transylvania
+
+A browser-based **point-and-click escape room**. Night has fallen over Castle Dracula and
+the doors have locked behind you — explore the rooms, inspect and collect objects, solve the
+Count's puzzles, and find the keys to unlock the castle gate before dawn.
+
+> Solo single-player · plays entirely in the browser · progress saved locally.
+
+## Tech stack
+
+- **React + Vite + TypeScript** — a fast, modern static web app (no backend required).
+- **Zustand** for game state, with `localStorage` persistence so progress survives a refresh.
+- Plain CSS with a gothic theme; placeholder room art that can be swapped for real artwork later.
+
+## Getting started
+
+```bash
+npm install      # install dependencies (first time only)
+npm run dev      # start the dev server, then open the printed http://localhost URL
+```
+
+Other scripts:
+
+```bash
+npm run build    # type-check and produce a production build in dist/
+npm run preview  # serve the production build locally to verify it
+npm run lint     # type-check without emitting files
+```
+
+> **New to this?** `npm run dev` is all you need day to day. Edit a file under `src/`, save,
+> and the browser updates automatically.
+
+## Project layout
+
+```
+public/            static assets served as-is (favicon, room art)
+src/
+  main.tsx         app entry point
+  App.tsx          root component
+  styles/          global + component CSS (gothic theme tokens live in global.css)
+  data/            game content: rooms, items, puzzles, hints   (added in later PRs)
+  state/           Zustand game store                            (added in later PRs)
+  components/       RoomScene, Hotspot, Inventory, etc.          (added in later PRs)
+```
+
+## Roadmap
+
+1. ✅ **Bootstrap** — project scaffold + gothic title screen.
+2. **Game engine** — data-driven rooms, inventory, navigation (the full castle skeleton).
+3. **Puzzles & keys** — puzzle panels, item use, collect 3 keys to unlock the gate.
+4. **Hints & polish** — hint system, save/reset, intro & win screens, styling pass.
+5. **CI & deploy** — automated tests and GitHub Pages deployment.
+
+## How the game is structured
+
+Rooms, items, and puzzles are defined as **data** (in `src/data/`), and generic components
+render them. Adding new content is mostly editing data — not writing new components. The castle
+has five rooms: the Dungeon (start), the Great Hall (hub), the Library, the Alchemy Lab, and the
+Castle Gate (the exit, which opens once you hold all three keys).
+
+---
+
+Built with [Claude Code](https://claude.com/claude-code).
