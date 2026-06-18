@@ -11,7 +11,6 @@ const puzzle: CipherPuzzle = {
   ciphertext: 'EORRG',
   solution: 'BLOOD',
   successMessage: 'Solved.',
-  hint: 'Shift back 3.',
 }
 
 describe('<Cipher>', () => {

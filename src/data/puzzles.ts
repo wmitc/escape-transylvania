@@ -24,8 +24,6 @@ interface PuzzleBase {
   requiresItemMessage?: string
   /** Narration shown after solving. */
   successMessage: string
-  /** Optional hint text (revealed by the hint system in a later PR). */
-  hint: string
 }
 
 /** Enter a fixed numeric code. */
@@ -70,7 +68,6 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     ],
     rewardItemId: 'iron-key',
     successMessage: 'The catch springs open. Inside lies a cold Iron Key.',
-    hint: 'Think of what each creature or omen belongs with: the bat with the night sky...',
   },
 
   // Library — decode the Count's cipher using the tome (shift each letter back by 3).
@@ -87,7 +84,6 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     requiresItemMessage: 'The cipher is meaningless without the key. Perhaps a book explains it.',
     rewardItemId: 'silver-key',
     successMessage: 'The drawer slides open, revealing a tarnished Silver Key.',
-    hint: 'Shift each letter back by three: E→B, O→L ... what five-letter word does the Count crave?',
   },
 
   // Alchemy Lab — read the recipe scrawled on the cauldron, then dial the code.
@@ -102,6 +98,5 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     solution: '371',
     rewardItemId: 'bone-key',
     successMessage: 'The lock clicks apart. A Bone Key hums faintly within.',
-    hint: 'The alchemist\'s note in the Great Hall reads "three bats, seven moons, a single drop." → 3, 7, 1.',
   },
 }

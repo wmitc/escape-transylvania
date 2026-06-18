@@ -22,14 +22,11 @@ interface GameState {
   selectedItemId: ItemId | null
   /** Puzzle whose panel is currently open, if any. */
   activePuzzleId: PuzzleId | null
-  /** Puzzles whose hint the player has revealed. */
-  hintsRevealed: Record<PuzzleId, boolean>
   /** Transient feedback line shown to the player. */
   message: string | null
 
   // --- actions ---
   startGame: () => void
-  revealHint: (puzzleId: PuzzleId) => void
   enterRoom: (roomId: RoomId) => void
   collectItem: (hotspotId: HotspotId, itemId: ItemId, description: string) => void
   tryExit: (exit: ExitHotspot) => void
@@ -53,7 +50,6 @@ const initialState = {
   flags: {} as Record<string, boolean>,
   selectedItemId: null as ItemId | null,
   activePuzzleId: null as PuzzleId | null,
-  hintsRevealed: {} as Record<PuzzleId, boolean>,
   message: null as string | null,
 }
 
@@ -63,9 +59,6 @@ export const useGameStore = create<GameState>()(
       ...initialState,
 
       startGame: () => set({ phase: 'playing', message: null }),
-
-      revealHint: (puzzleId) =>
-        set((state) => ({ hintsRevealed: { ...state.hintsRevealed, [puzzleId]: true } })),
 
       enterRoom: (roomId) => set({ currentRoomId: roomId, message: null, selectedItemId: null }),
 
@@ -154,7 +147,6 @@ export const useGameStore = create<GameState>()(
         collectedHotspots: state.collectedHotspots,
         solvedPuzzles: state.solvedPuzzles,
         flags: state.flags,
-        hintsRevealed: state.hintsRevealed,
       }),
     },
   ),
