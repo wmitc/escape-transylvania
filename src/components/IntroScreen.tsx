@@ -18,10 +18,19 @@ export function IntroScreen() {
           Search the shadows, solve the Count's puzzles, and find the three keys before
           dawn — or remain his guest forever.
         </p>
+        <ul className="howto">
+          <li>🔍 Click objects in each room to inspect and collect them.</li>
+          <li>🧩 Solve a puzzle in three rooms to earn the iron, silver, and bone keys.</li>
+          <li>🚪 Unlock the castle gate with all three keys to escape.</li>
+        </ul>
         <button className="enter-button" type="button" onClick={startGame}>
           {hasProgress ? 'Continue Your Escape' : 'Enter the Castle'}
         </button>
-        <p className="footnote">Click objects to inspect them · find items · escape</p>
+        <p className="footnote">
+          {hasProgress
+            ? 'Your progress is saved in this browser.'
+            : 'Stuck on a puzzle? A hint is always one click away.'}
+        </p>
       </main>
     </div>
   )

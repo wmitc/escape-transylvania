@@ -5,6 +5,7 @@ import { useGameStore } from '../state/gameStore'
 import { CombinationLock } from '../puzzles/CombinationLock'
 import { Cipher } from '../puzzles/Cipher'
 import { Matching } from '../puzzles/Matching'
+import { HintButton } from './HintButton'
 
 /**
  * Overlay that hosts the active puzzle. Renders the right puzzle UI for the
@@ -39,6 +40,8 @@ export function PuzzleModal({ puzzleId }: { puzzleId: PuzzleId }) {
         {puzzle.type === 'combination' && <CombinationLock puzzle={puzzle} onSolved={handleSolved} />}
         {puzzle.type === 'cipher' && <Cipher puzzle={puzzle} onSolved={handleSolved} />}
         {puzzle.type === 'matching' && <Matching puzzle={puzzle} onSolved={handleSolved} />}
+
+        <HintButton puzzleId={puzzle.id} />
 
         {rewardItem && (
           <p className="modal-reward">

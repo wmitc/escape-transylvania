@@ -43,6 +43,19 @@
   line-height: 1.7;
 }
 
+.howto {
+  list-style: none;
+  margin: 0 auto 2rem;
+  padding: 1rem 1.25rem;
+  max-width: 28rem;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(192, 57, 43, 0.25);
+  border-radius: 8px;
+  color: var(--color-text-dim);
+  line-height: 1.9;
+}
+
 .enter-button {
   font-family: var(--font-display);
   font-size: 1.05rem;
