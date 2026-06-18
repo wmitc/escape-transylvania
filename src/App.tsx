@@ -1,27 +1,29 @@
 import './styles/app.css'
+import './styles/game.css'
+import { useGameStore } from './state/gameStore'
+import { IntroScreen } from './components/IntroScreen'
+import { WinScreen } from './components/WinScreen'
+import { Navigation } from './components/Navigation'
+import { RoomScene } from './components/RoomScene'
+import { Inventory } from './components/Inventory'
 
 /**
- * Root component. For the bootstrap this is just the gothic title shell — the
- * actual game engine (rooms, inventory, puzzles) is added in later PRs.
+ * Root component. Picks the screen to show based on the game phase:
+ * intro → playing (the castle) → won.
  */
 function App() {
+  const phase = useGameStore((s) => s.phase)
+
+  if (phase === 'intro') return <IntroScreen />
+  if (phase === 'won') return <WinScreen />
+
   return (
-    <div className="app-shell">
-      <main className="title-card">
-        <p className="kicker">A Point-and-Click Escape Room</p>
-        <h1 className="title">
-          Escape <span className="title-accent">Transylvania</span>
-        </h1>
-        <p className="tagline">
-          Night has fallen over Castle Dracula, and the doors have locked behind you.
-          Search the shadows, solve the Count's puzzles, and find the keys before dawn —
-          or remain his guest forever.
-        </p>
-        <button className="enter-button" type="button" disabled>
-          Enter the Castle — coming soon
-        </button>
-        <p className="footnote">Bootstrap build · the castle awaits its rooms</p>
-      </main>
+    <div className="game">
+      <Navigation />
+      <div className="game__body">
+        <RoomScene />
+        <Inventory />
+      </div>
     </div>
   )
 }
