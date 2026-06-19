@@ -17,6 +17,12 @@ export const ITEMS: Record<ItemId, Item> = {
     icon: '🔩',
     description: 'A long, rusted nail. Thin enough to pick a crude lock.',
   },
+  crowbar: {
+    id: 'crowbar',
+    name: 'Iron Crowbar',
+    icon: '🪓',
+    description: 'A heavy iron crowbar. Good for prying open what was meant to stay shut.',
+  },
   book: {
     id: 'book',
     name: 'Leather Tome',

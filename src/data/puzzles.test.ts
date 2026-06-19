@@ -32,4 +32,26 @@ describe('puzzle data integrity', () => {
       .filter((id): id is string => Boolean(id) && ITEMS[id!].isKey === true)
     expect(new Set(rewardedKeys).size).toBe(3)
   })
+
+  it('ordering and sequence solutions reference defined tiles/buttons', () => {
+    for (const puzzle of Object.values(PUZZLES)) {
+      if (puzzle.type === 'ordering') {
+        const ids = puzzle.tiles.map((t) => t.id).sort()
+        expect([...puzzle.solution].sort()).toEqual(ids)
+      }
+      if (puzzle.type === 'sequence') {
+        const ids = new Set(puzzle.buttons.map((b) => b.id))
+        expect(puzzle.solution.every((id) => ids.has(id))).toBe(true)
+      }
+    }
+  })
+
+  it('the weighing odd barrel index is within range', () => {
+    for (const puzzle of Object.values(PUZZLES)) {
+      if (puzzle.type === 'weighing') {
+        expect(puzzle.oddIndex).toBeGreaterThanOrEqual(0)
+        expect(puzzle.oddIndex).toBeLessThan(puzzle.count)
+      }
+    }
+  })
 })
