@@ -6,7 +6,12 @@ import { STARTING_ROOM_ID } from '../data/rooms'
 import { PUZZLES } from '../data/puzzles'
 
 /** Which top-level screen the game is on. */
-export type GamePhase = 'intro' | 'playing' | 'won'
+export type GamePhase = 'intro' | 'playing' | 'won' | 'lost'
+
+/** How long the player has to escape before dawn. */
+export const DAWN_MS = 30 * 60 * 1000
+/** Time lost for a wrong answer on a lock. */
+export const WRONG_ANSWER_PENALTY_SEC = 60
 
 interface GameState {
   phase: GamePhase
@@ -22,11 +27,16 @@ interface GameState {
   selectedItemId: ItemId | null
   /** Puzzle whose panel is currently open, if any. */
   activePuzzleId: PuzzleId | null
+  /** Epoch ms when dawn breaks and the game is lost; null until the game starts. */
+  deadlineAt: number | null
   /** Transient feedback line shown to the player. */
   message: string | null
 
   // --- actions ---
   startGame: () => void
+  ensureTimer: () => void
+  penalizeTime: (seconds: number, message: string) => void
+  loseGame: () => void
   enterRoom: (roomId: RoomId) => void
   collectItem: (hotspotId: HotspotId, itemId: ItemId, description: string) => void
   insertKey: (keyItemId: ItemId, placedFlag: string) => void
@@ -57,6 +67,7 @@ const initialState = {
   flags: {} as Record<string, boolean>,
   selectedItemId: null as ItemId | null,
   activePuzzleId: null as PuzzleId | null,
+  deadlineAt: null as number | null,
   message: null as string | null,
 }
 
@@ -65,7 +76,23 @@ export const useGameStore = create<GameState>()(
     (set, get) => ({
       ...initialState,
 
-      startGame: () => set({ phase: 'playing', message: null }),
+      startGame: () => set({ phase: 'playing', message: null, deadlineAt: Date.now() + DAWN_MS }),
+
+      // Start the countdown if it isn't running (covers resumed/older saves).
+      ensureTimer: () =>
+        set((state) =>
+          state.phase === 'playing' && state.deadlineAt == null
+            ? { deadlineAt: Date.now() + DAWN_MS }
+            : state,
+        ),
+
+      penalizeTime: (seconds, message) =>
+        set((state) => ({
+          deadlineAt: state.deadlineAt == null ? state.deadlineAt : state.deadlineAt - seconds * 1000,
+          message,
+        })),
+
+      loseGame: () => set({ phase: 'lost', message: null, activePuzzleId: null }),
 
       enterRoom: (roomId) => set({ currentRoomId: roomId, message: null, selectedItemId: null }),
 
@@ -224,6 +251,7 @@ export const useGameStore = create<GameState>()(
         collectedHotspots: state.collectedHotspots,
         solvedPuzzles: state.solvedPuzzles,
         flags: state.flags,
+        deadlineAt: state.deadlineAt,
       }),
     },
   ),

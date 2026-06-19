@@ -116,6 +116,33 @@ describe('insertKey (select the key, then click the lock)', () => {
   })
 })
 
+describe('the dawn timer', () => {
+  it('starts the countdown when the game starts', () => {
+    store().startGame()
+    expect(store().deadlineAt).toBeGreaterThan(Date.now())
+  })
+
+  it('a wrong answer subtracts time', () => {
+    store().startGame()
+    const before = store().deadlineAt!
+    store().penalizeTime(60, 'ouch')
+    expect(store().deadlineAt).toBe(before - 60_000)
+  })
+
+  it('loseGame ends the game', () => {
+    store().startGame()
+    store().loseGame()
+    expect(store().phase).toBe('lost')
+  })
+
+  it('resetting clears the deadline', () => {
+    store().startGame()
+    store().resetGame()
+    expect(store().deadlineAt).toBeNull()
+    expect(store().phase).toBe('intro')
+  })
+})
+
 describe('tryExit (the castle gate)', () => {
   beforeEach(() => store().startGame())
 

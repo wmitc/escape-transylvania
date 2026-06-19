@@ -1,7 +1,7 @@
 import type { PuzzleId } from '../types'
 import { PUZZLES } from '../data/puzzles'
 import { ITEMS } from '../data/items'
-import { useGameStore } from '../state/gameStore'
+import { useGameStore, WRONG_ANSWER_PENALTY_SEC } from '../state/gameStore'
 import { CombinationLock } from '../puzzles/CombinationLock'
 import { Cipher } from '../puzzles/Cipher'
 import { Matching } from '../puzzles/Matching'
@@ -15,6 +15,7 @@ export function PuzzleModal({ puzzleId }: { puzzleId: PuzzleId }) {
   const solvePuzzle = useGameStore((s) => s.solvePuzzle)
   const closePuzzle = useGameStore((s) => s.closePuzzle)
   const setMessage = useGameStore((s) => s.setMessage)
+  const penalizeTime = useGameStore((s) => s.penalizeTime)
 
   if (!puzzle) return null
 
@@ -23,6 +24,10 @@ export function PuzzleModal({ puzzleId }: { puzzleId: PuzzleId }) {
     solvePuzzle(puzzle.id, reward, puzzle.flag)
     setMessage(puzzle.successMessage)
     closePuzzle()
+  }
+
+  function handleWrong() {
+    penalizeTime(WRONG_ANSWER_PENALTY_SEC, 'Wrong. The lock holds — and dawn creeps a minute closer.')
   }
 
   const rewardItem = puzzle.rewardItemId ? ITEMS[puzzle.rewardItemId] : undefined
@@ -36,8 +41,12 @@ export function PuzzleModal({ puzzleId }: { puzzleId: PuzzleId }) {
         <h3 className="modal-title">{puzzle.title}</h3>
         <p className="modal-prompt">{puzzle.prompt}</p>
 
-        {puzzle.type === 'combination' && <CombinationLock puzzle={puzzle} onSolved={handleSolved} />}
-        {puzzle.type === 'cipher' && <Cipher puzzle={puzzle} onSolved={handleSolved} />}
+        {puzzle.type === 'combination' && (
+          <CombinationLock puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
+        )}
+        {puzzle.type === 'cipher' && (
+          <Cipher puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
+        )}
         {puzzle.type === 'matching' && <Matching puzzle={puzzle} onSolved={handleSolved} />}
 
         {rewardItem && (

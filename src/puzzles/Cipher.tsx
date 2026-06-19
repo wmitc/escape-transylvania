@@ -2,7 +2,15 @@ import { useState } from 'react'
 import type { CipherPuzzle } from '../data/puzzles'
 
 /** Shows enciphered text and accepts the decoded word (case-insensitive). */
-export function Cipher({ puzzle, onSolved }: { puzzle: CipherPuzzle; onSolved: () => void }) {
+export function Cipher({
+  puzzle,
+  onSolved,
+  onWrong,
+}: {
+  puzzle: CipherPuzzle
+  onSolved: () => void
+  onWrong?: () => void
+}) {
   const [answer, setAnswer] = useState('')
   const [error, setError] = useState(false)
 
@@ -12,6 +20,7 @@ export function Cipher({ puzzle, onSolved }: { puzzle: CipherPuzzle; onSolved: (
       onSolved()
     } else {
       setError(true)
+      onWrong?.()
     }
   }
 

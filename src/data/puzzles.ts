@@ -79,10 +79,10 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     type: 'cipher',
     title: 'The Cipher Lectern',
     prompt:
-      "A drawer in the lectern is sealed by a word in the Count's cipher. The tome says " +
+      "A drawer in the lectern is sealed by a phrase in the Count's cipher. The tome says " +
       'each letter has been shifted three places forward in the alphabet. Decode it:',
-    ciphertext: 'EORRG',
-    solution: 'BLOOD',
+    ciphertext: 'WKH FRXQW',
+    solution: 'THE COUNT',
     requiresItemId: 'book',
     requiresItemMessage: 'The cipher is meaningless without the key. Perhaps a book explains it.',
     rewardItemId: 'silver-key',
