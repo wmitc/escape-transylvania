@@ -5,9 +5,11 @@ import type { CombinationPuzzle } from '../data/puzzles'
 export function CombinationLock({
   puzzle,
   onSolved,
+  onWrong,
 }: {
   puzzle: CombinationPuzzle
   onSolved: () => void
+  onWrong?: () => void
 }) {
   const [digits, setDigits] = useState<number[]>(() => Array(puzzle.length).fill(0))
   const [error, setError] = useState(false)
@@ -26,6 +28,7 @@ export function CombinationLock({
       onSolved()
     } else {
       setError(true)
+      onWrong?.()
     }
   }
 

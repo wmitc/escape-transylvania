@@ -30,6 +30,28 @@
   color: var(--color-text-dim);
 }
 
+.hud__timer {
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--color-candle);
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgba(232, 201, 135, 0.3);
+  border-radius: 5px;
+}
+
+.hud__timer.is-low {
+  color: var(--color-blood-bright);
+  border-color: rgba(192, 57, 43, 0.6);
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
 .hud__restart {
   font-family: var(--font-display);
   color: var(--color-text);

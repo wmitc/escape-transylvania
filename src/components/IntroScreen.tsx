@@ -19,9 +19,9 @@ export function IntroScreen() {
           dawn — or remain his guest forever.
         </p>
         <ul className="howto">
-          <li>🔍 Click objects in each room to inspect and collect them.</li>
-          <li>🧩 Solve a puzzle in three rooms to earn the iron, silver, and bone keys.</li>
-          <li>🚪 Unlock the castle gate with all three keys to escape.</li>
+          <li>🔍 Click objects to inspect them; click a satchel item to select it, then click where to use it.</li>
+          <li>🧩 Solve the castle's puzzles to earn the three keys to the gate.</li>
+          <li>🌙 Escape before dawn — wrong answers on a lock cost you precious minutes.</li>
         </ul>
         <button className="enter-button" type="button" onClick={startGame}>
           {hasProgress ? 'Continue Your Escape' : 'Enter the Castle'}

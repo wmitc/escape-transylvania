@@ -3,6 +3,7 @@ import './styles/game.css'
 import { useGameStore } from './state/gameStore'
 import { IntroScreen } from './components/IntroScreen'
 import { WinScreen } from './components/WinScreen'
+import { LoseScreen } from './components/LoseScreen'
 import { Navigation } from './components/Navigation'
 import { RoomScene } from './components/RoomScene'
 import { Inventory } from './components/Inventory'
@@ -16,6 +17,7 @@ function App() {
 
   if (phase === 'intro') return <IntroScreen />
   if (phase === 'won') return <WinScreen />
+  if (phase === 'lost') return <LoseScreen />
 
   return (
     <div className="game">
