@@ -35,14 +35,21 @@ export function RoomScene() {
   const message = useGameStore((s) => s.message)
   const activePuzzleId = useGameStore((s) => s.activePuzzleId)
 
+  const inventory = useGameStore((s) => s.inventory)
+
   const room = ROOMS[currentRoomId]
-  const hotspots = visibleHotspots(room.hotspots, collectedHotspots, solvedPuzzles, flags)
   const SceneArt = SCENE_ART[currentRoomId]
+  // A dark room stays black until the torch is carried; only exits are usable.
+  const isDark = !!room.dark && !inventory.includes('torch')
+  const hotspots = visibleHotspots(room.hotspots, collectedHotspots, solvedPuzzles, flags).filter(
+    (h) => !isDark || h.type === 'exit',
+  )
 
   return (
     <section className="scene-wrap" aria-label={room.name}>
-      <div className="scene" style={{ background: room.background }}>
+      <div className={`scene${isDark ? ' scene--dark' : ''}`} style={{ background: room.background }}>
         {SceneArt && <SceneArt />}
+        {isDark && <p className="scene-dark-note">Pitch black. You need a light to see in here.</p>}
         {hotspots.map((h) => (
           <Hotspot key={h.id} hotspot={h} />
         ))}

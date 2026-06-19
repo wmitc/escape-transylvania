@@ -47,8 +47,8 @@ export const ROOMS: Record<RoomId, Room> = {
         description: 'Dracula stares down, pale and amused. The eyes seem to follow you.' },
       { id: 'hall-recipe', type: 'look', label: "Alchemist's Note", icon: '📜', x: 28, y: 39,
         description:
-          'A note is pinned to the wall in a spidery hand: "For the cabinet — three bats, ' +
-          'seven moons, a single drop of blood."' },
+          'A note is pinned to the wall in a spidery hand: "The cabinet\'s numbers will not ' +
+          'sit on paper. Pour the crimson vial into the cauldron and read the smoke."' },
       { id: 'hall-to-dungeon', type: 'exit', label: 'Down to the Dungeon', icon: '🕳️', x: 12, y: 76,
         targetRoomId: 'dungeon' },
       { id: 'hall-to-library', type: 'exit', label: 'To the Library', icon: '📚', x: 36, y: 76,
@@ -63,6 +63,7 @@ export const ROOMS: Record<RoomId, Room> = {
   library: {
     id: 'library',
     name: 'The Library',
+    dark: true,
     description:
       'Towering shelves sag under centuries of forbidden books. Dust hangs in the ' +
       'candlelight, and one volume lies open on a lectern.',
@@ -87,10 +88,13 @@ export const ROOMS: Record<RoomId, Room> = {
       'cabinet rattles faintly, as if something inside wants out.',
     background: 'radial-gradient(ellipse at 50% 45%, #16302a 0%, #0c1c18 60%, #06100d 100%)',
     hotspots: [
-      { id: 'lab-cauldron', type: 'look', label: 'Bubbling Cauldron', icon: '🌫️', x: 28, y: 58,
-        description:
-          'A cauldron froths an unhealthy green; bubbles pop into little screaming shapes. ' +
-          'The recipe that once hung here is gone.' },
+      { id: 'lab-cauldron', type: 'apply', label: 'Bubbling Cauldron', icon: '🌫️', x: 28, y: 58,
+        itemId: 'vial', setsFlag: 'cauldron-brewed',
+        emptyDescription:
+          'A cauldron froths an unhealthy green. Something could be dissolved in it — if you had the right draught.',
+        revealMessage:
+          'You tip the crimson vial into the cauldron. The brew flares and the smoke curls ' +
+          'into figures: three bats, seven moons, a single drop — 3, 7, 1.' },
       { id: 'lab-vial', type: 'item', label: 'Crimson Vial', icon: '🧪', x: 49, y: 61,
         itemId: 'vial', description: 'You pocket a vial of dark crimson liquid. It is warm.' },
       { id: 'lab-cabinet', type: 'puzzle', label: 'Locked Cabinet', icon: '🗄️', x: 85, y: 62,

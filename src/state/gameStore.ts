@@ -30,6 +30,12 @@ interface GameState {
   enterRoom: (roomId: RoomId) => void
   collectItem: (hotspotId: HotspotId, itemId: ItemId, description: string) => void
   insertKey: (keyItemId: ItemId, placedFlag: string) => void
+  applyItem: (
+    itemId: ItemId,
+    setsFlag: string,
+    revealMessage: string,
+    emptyDescription: string,
+  ) => void
   tryExit: (exit: ExitHotspot) => void
   look: (description: string) => void
   openPuzzle: (puzzleId: PuzzleId) => void
@@ -92,6 +98,20 @@ export const useGameStore = create<GameState>()(
             flags: { ...state.flags, [placedFlag]: true },
             selectedItemId: state.selectedItemId === keyItemId ? null : state.selectedItemId,
             message: `You set the ${key?.name ?? 'key'} into the lock. It turns with a heavy clunk.`,
+          }
+        }),
+
+      // Use a one-shot item on a hotspot (e.g. pour the vial into the cauldron).
+      // Consumes the item and sets a flag; re-inspecting shows the reveal again.
+      applyItem: (itemId, setsFlag, revealMessage, emptyDescription) =>
+        set((state) => {
+          if (state.flags[setsFlag]) return { message: revealMessage }
+          if (!state.inventory.includes(itemId)) return { message: emptyDescription }
+          return {
+            inventory: state.inventory.filter((i) => i !== itemId),
+            flags: { ...state.flags, [setsFlag]: true },
+            selectedItemId: state.selectedItemId === itemId ? null : state.selectedItemId,
+            message: revealMessage,
           }
         }),
 

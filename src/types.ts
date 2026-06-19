@@ -32,6 +32,7 @@ export type Hotspot =
   | ItemHotspot
   | PuzzleHotspot
   | KeyholeHotspot
+  | ApplyHotspot
   | ExitHotspot
 
 interface HotspotBase {
@@ -75,6 +76,19 @@ export interface KeyholeHotspot extends HotspotBase {
   placedFlag: string
 }
 
+/** Apply (consume) an item here to reveal something and set a flag. */
+export interface ApplyHotspot extends HotspotBase {
+  type: 'apply'
+  /** Item required and consumed when applied. */
+  itemId: ItemId
+  /** Flag set once applied. */
+  setsFlag: string
+  /** Shown before applying, when you don't yet hold the item. */
+  emptyDescription: string
+  /** The reveal shown on applying (and on re-inspection afterwards). */
+  revealMessage: string
+}
+
 /** Moves the player to another room, optionally gated by a condition. */
 export interface ExitHotspot extends HotspotBase {
   type: 'exit'
@@ -97,6 +111,8 @@ export interface Room {
   name: string
   /** Flavor text shown when the player enters. */
   description: string
+  /** If true, the room is pitch-dark until the player carries the torch. */
+  dark?: boolean
   /** CSS background applied to the scene (placeholder art). */
   background: string
   hotspots: Hotspot[]
