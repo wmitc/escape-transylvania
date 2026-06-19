@@ -82,35 +82,50 @@ export const useGameStore = create<GameState>()(
           }
         }),
 
-      // Insert a key into its keyhole. The key must be in the inventory; once
-      // placed it leaves the satchel and sets the keyhole's flag.
+      // Insert a key into its keyhole. The matching key must be SELECTED in the
+      // satchel first; once placed it leaves the satchel and sets the flag.
       insertKey: (keyItemId, placedFlag) =>
         set((state) => {
           const key = ITEMS[keyItemId]
           if (state.flags[placedFlag]) {
             return { message: `The ${key?.name ?? 'key'} is already set in the lock.` }
           }
+          if (state.selectedItemId !== keyItemId) {
+            return {
+              message: state.selectedItemId
+                ? `The ${ITEMS[state.selectedItemId]?.name ?? 'item'} doesn't fit this lock.`
+                : 'Select the right key from your satchel, then click the lock.',
+            }
+          }
           if (!state.inventory.includes(keyItemId)) {
-            return { message: `You don't have the ${key?.name ?? 'right key'} yet.` }
+            return { message: `You don't have the ${key?.name ?? 'right key'}.` }
           }
           return {
             inventory: state.inventory.filter((i) => i !== keyItemId),
             flags: { ...state.flags, [placedFlag]: true },
-            selectedItemId: state.selectedItemId === keyItemId ? null : state.selectedItemId,
+            selectedItemId: null,
             message: `You set the ${key?.name ?? 'key'} into the lock. It turns with a heavy clunk.`,
           }
         }),
 
       // Use a one-shot item on a hotspot (e.g. pour the vial into the cauldron).
-      // Consumes the item and sets a flag; re-inspecting shows the reveal again.
+      // The item must be SELECTED first; it is then consumed and sets a flag.
+      // Re-inspecting after applying shows the reveal again.
       applyItem: (itemId, setsFlag, revealMessage, emptyDescription) =>
         set((state) => {
           if (state.flags[setsFlag]) return { message: revealMessage }
+          if (state.selectedItemId !== itemId) {
+            return {
+              message: state.selectedItemId
+                ? `The ${ITEMS[state.selectedItemId]?.name ?? 'item'} does nothing here.`
+                : emptyDescription,
+            }
+          }
           if (!state.inventory.includes(itemId)) return { message: emptyDescription }
           return {
             inventory: state.inventory.filter((i) => i !== itemId),
             flags: { ...state.flags, [setsFlag]: true },
-            selectedItemId: state.selectedItemId === itemId ? null : state.selectedItemId,
+            selectedItemId: null,
             message: revealMessage,
           }
         }),
@@ -148,12 +163,23 @@ export const useGameStore = create<GameState>()(
           set({ message: 'You have already solved this.' })
           return
         }
-        // Some puzzles can't be attempted without the right item in hand.
-        if (puzzle.requiresItemId && !state.inventory.includes(puzzle.requiresItemId)) {
-          set({ message: puzzle.requiresItemMessage ?? 'You are missing something needed here.' })
-          return
+        // Some puzzles can't be attempted without the right item SELECTED (e.g.
+        // select the tome, then click the cipher). The item is not consumed.
+        if (puzzle.requiresItemId) {
+          if (state.selectedItemId !== puzzle.requiresItemId) {
+            set({
+              message: state.selectedItemId
+                ? `The ${ITEMS[state.selectedItemId]?.name ?? 'item'} is no use here.`
+                : puzzle.requiresItemMessage ?? 'You need the right item selected to attempt this.',
+            })
+            return
+          }
+          if (!state.inventory.includes(puzzle.requiresItemId)) {
+            set({ message: puzzle.requiresItemMessage ?? 'You are missing something needed here.' })
+            return
+          }
         }
-        set({ activePuzzleId: puzzleId, message: null })
+        set({ activePuzzleId: puzzleId, message: null, selectedItemId: null })
       },
 
       closePuzzle: () => set({ activePuzzleId: null }),
@@ -170,7 +196,14 @@ export const useGameStore = create<GameState>()(
         }),
 
       selectItem: (itemId) =>
-        set((state) => ({ selectedItemId: state.selectedItemId === itemId ? null : itemId })),
+        set((state) => {
+          const deselect = state.selectedItemId === itemId
+          const item = itemId ? ITEMS[itemId] : undefined
+          return {
+            selectedItemId: deselect ? null : itemId,
+            message: deselect || !item ? null : `${item.name} selected — now click where to use it.`,
+          }
+        }),
 
       setFlag: (flag, value = true) =>
         set((state) => ({ flags: { ...state.flags, [flag]: value } })),
