@@ -1,6 +1,7 @@
 import { useGameStore } from '../state/gameStore'
 import { ROOMS } from '../data/rooms'
 import { DawnTimer } from './DawnTimer'
+import { SoundToggle } from './SoundToggle'
 
 /** Top HUD bar: shows where the player is and offers a restart. */
 export function Navigation() {
@@ -22,6 +23,7 @@ export function Navigation() {
         {room.name}
       </span>
       <DawnTimer />
+      <SoundToggle />
       <button type="button" className="hud__restart" onClick={handleRestart}>
         Restart
       </button>

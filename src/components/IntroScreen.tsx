@@ -1,4 +1,5 @@
 import { useGameStore } from '../state/gameStore'
+import { SoundToggle } from './SoundToggle'
 
 /** The title screen. Begins (or resumes) the game. */
 export function IntroScreen() {
@@ -8,6 +9,7 @@ export function IntroScreen() {
 
   return (
     <div className="app-shell">
+      <SoundToggle className="corner-sound" />
       <main className="title-card">
         <p className="kicker">A Point-and-Click Escape Room</p>
         <h1 className="title">
