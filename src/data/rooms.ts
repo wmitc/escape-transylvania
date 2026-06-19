@@ -28,8 +28,12 @@ export const ROOMS: Record<RoomId, Room> = {
       'sealed stairwell descends into deeper black. This is no way to spend an eternity.',
     background: 'radial-gradient(ellipse at 50% 30%, #2a2230 0%, #14101a 60%, #0a070d 100%)',
     hotspots: [
-      { id: 'dungeon-chains', type: 'look', label: 'Iron Chains', icon: '⛓️', x: 16, y: 38,
+      { id: 'dungeon-chains', type: 'look', label: 'Iron Chains', icon: '⛓️', x: 14, y: 36,
         description: 'Manacles bolted to the wall. Whoever hung here is long gone.' },
+      { id: 'dungeon-scratches', type: 'look', label: 'Scratches on the Wall', icon: '✒️', x: 30, y: 50,
+        description:
+          'A prisoner before you clawed a tally into the stone, in four clusters: ' +
+          '‖‖  ‖‖‖‖  ‖  ‖‖‖. Beneath it: "the pins, in order, will set me free."' },
       { id: 'dungeon-torch', type: 'item', label: 'Wall Torch', icon: '🔥', x: 82, y: 30,
         itemId: 'torch', description: 'You lift a lit torch from its bracket. The shadows retreat.' },
       { id: 'dungeon-straw', type: 'item', label: 'Pile of Straw', icon: '🌾', x: 33, y: 84,
@@ -142,13 +146,13 @@ export const ROOMS: Record<RoomId, Room> = {
       'different sign. Ring them in the order the sheet music decreed.',
     background: 'radial-gradient(ellipse at 50% 30%, #1d2734 0%, #0f161f 60%, #07090d 100%)',
     hotspots: [
-      { id: 'bell-wolf', type: 'bell', label: 'Wolf Bell', icon: '🐺', x: 24, y: 52,
+      { id: 'bell-wolf', type: 'bell', label: 'Wolf Bell', icon: '🐺', x: 24, y: 46,
         bellId: 'wolf', note: 55, puzzleId: 'bell-sequence' },
-      { id: 'bell-moon', type: 'bell', label: 'Moon Bell', icon: '🌙', x: 41, y: 52,
+      { id: 'bell-moon', type: 'bell', label: 'Moon Bell', icon: '🌙', x: 41, y: 46,
         bellId: 'moon', note: 64, puzzleId: 'bell-sequence' },
-      { id: 'bell-dusk', type: 'bell', label: 'Dusk Bell', icon: '🌆', x: 61, y: 52,
+      { id: 'bell-dusk', type: 'bell', label: 'Dusk Bell', icon: '🌆', x: 61, y: 46,
         bellId: 'dusk', note: 60, puzzleId: 'bell-sequence' },
-      { id: 'bell-raven', type: 'bell', label: 'Raven Bell', icon: '🐦‍⬛', x: 77, y: 52,
+      { id: 'bell-raven', type: 'bell', label: 'Raven Bell', icon: '🐦‍⬛', x: 77, y: 46,
         bellId: 'raven', note: 67, puzzleId: 'bell-sequence' },
       { id: 'tower-exit', type: 'exit', label: 'Down to the Chapel', icon: '🪜', x: 86, y: 84,
         targetRoomId: 'chapel' },

@@ -102,27 +102,25 @@ export type Puzzle =
   | WeighingPuzzle
 
 export const PUZZLES: Record<PuzzleId, Puzzle> = {
-  // Dungeon — pick the cell door's lock with the nail; opens the door and yields a crowbar.
+  // Dungeon — pick the four-pin tumbler lock with the nail. The code is the
+  // prisoner's tally scratched on the cell wall (count the clusters).
   'cell-lock': {
     id: 'cell-lock',
-    type: 'matching',
+    type: 'combination',
     title: 'The Cell Door Lock',
     prompt:
-      'The cell door is held by an old tumbler lock, its face etched with omens. Match each ' +
-      'omen to its companion and rake the pins to open it.',
-    pairs: [
-      { left: '🦇', right: '🌙' },
-      { left: '🕷️', right: '🕸️' },
-      { left: '⚰️', right: '💀' },
-    ],
+      'A four-pin tumbler lock holds the cell door. Rake each pin to the right depth (0–9). ' +
+      'The depths must be written somewhere — a prisoner does not forget the way out.',
+    length: 4,
+    solution: '2413',
     requiresItemId: 'rusty-nail',
     requiresItemMessage:
       'The lock is jammed tight. You need something thin to rake the pins — a nail, perhaps.',
     flag: 'cell-open',
     rewardItemId: 'crowbar',
     successMessage:
-      'You rake the pins with the nail and the lock gives. The cell door swings open — and a ' +
-      'crowbar that braced it clatters to the floor.',
+      'The fourth pin gives with a click and the cell door swings open — and a crowbar that ' +
+      'braced it clatters to the floor.',
   },
 
   // Catacombs — order the dead by the clues carved above the niches; opens the relic niche.
