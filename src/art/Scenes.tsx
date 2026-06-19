@@ -22,6 +22,53 @@ function Archway({ cx, top = 104 }: { cx: number; top?: number }) {
 }
 
 /**
+ * A 2D spiral staircase winding up a central post. Treads alternate to the
+ * front (lighter, right of the post) and the back (darker, left), narrowing as
+ * they climb to suggest perspective.
+ */
+function SpiralStair({ cx, baseY = 150, steps = 9 }: { cx: number; baseY?: number; steps?: number }) {
+  const back: ReactElement[] = []
+  const front: ReactElement[] = []
+  const tips: [number, number][] = []
+  for (let i = 0; i < steps; i++) {
+    const y = baseY - i * 9
+    const right = i % 2 === 0
+    const w = (25 - i * 0.7) * (right ? 1 : -1)
+    const slab = (
+      <g key={i}>
+        {/* tread top */}
+        <path
+          d={`M${cx} ${y} L${cx + w} ${y - 5} L${cx + w} ${y - 1} L${cx} ${y + 4} Z`}
+          fill={right ? '#433c5c' : '#322c48'}
+          stroke="#15121f"
+          strokeWidth="0.8"
+        />
+        {/* riser shadow */}
+        <path d={`M${cx} ${y + 4} L${cx + w} ${y - 1} L${cx + w} ${y + 2} L${cx} ${y + 7} Z`} fill="#15121f" />
+      </g>
+    )
+    ;(right ? front : back).push(slab)
+    tips.push([cx + w, y - 5])
+  }
+  // Handrail weaving through the outer tips — the helix edge.
+  let rail = `M${tips[0][0]} ${tips[0][1]}`
+  for (let i = 1; i < tips.length; i++) {
+    const [, py] = tips[i - 1]
+    const [x, y] = tips[i]
+    rail += ` Q${cx} ${(py + y) / 2} ${x} ${y}`
+  }
+  const topY = baseY - (steps - 1) * 9
+  return (
+    <g>
+      {back}
+      <rect x={cx - 3} y={topY - 4} width="6" height={baseY - topY + 12} fill="#39324e" stroke="#15121f" strokeWidth="1" />
+      {front}
+      <path d={rail} fill="none" stroke="#6a6086" strokeWidth="1.6" strokeLinecap="round" opacity="0.9" />
+    </g>
+  )
+}
+
+/**
  * Hand-drawn gothic scene art, one SVG per room. These are the room
  * "backgrounds": RoomScene renders the matching scene behind the hotspots.
  * They are pure vector (no external assets) and can be swapped for real
@@ -57,6 +104,7 @@ function StoneCourses({ fill = '#000', opacity = 0.25 }: { fill?: string; opacit
 }
 
 function DungeonScene() {
+  const opened = useGameStore((s) => !!s.flags['catacombs-open'])
   return (
     <svg {...sceneProps}>
       <defs>
@@ -89,6 +137,14 @@ function DungeonScene() {
         <path d="M70 0 q-4 12 0 24 q4 12 0 24" />
       </g>
       <circle cx="44" cy="84" r="4" fill="none" stroke="#4a4150" strokeWidth="2.5" />
+      {/* prisoner's tally scratched on the wall — the lock code (2,4,1,3) */}
+      <g stroke="#6a6070" strokeWidth="1.5" opacity="0.85" strokeLinecap="round">
+        {[[0, 2], [16, 4], [40, 1], [50, 3]].map(([gx, n]) =>
+          Array.from({ length: n as number }, (_, i) => (
+            <line key={`${gx}-${i}`} x1={78 + gx + i * 3} y1="84" x2={78 + gx + i * 3} y2="98" />
+          )),
+        )}
+      </g>
       {/* iron cell gate, centre */}
       <g>
         <rect x="120" y="56" width="92" height="104" fill="#0a0812" />
@@ -110,14 +166,35 @@ function DungeonScene() {
         <path d="M249 24 q-9 8 -4 16 q9 -2 8 -10 q4 8 -1 14 q11 -3 9 -16 q-7 4 -7 -2 q-3 5 -5 -2 z" fill="#e8a04a" />
         <path d="M249 28 q-5 6 -2 11 q6 -2 4 -8 q3 5 0 9 q6 -3 5 -10 q-5 3 -6 -1 z" fill="#f7d97a" />
       </g>
-      {/* boarded-over stairwell down to the catacombs, lower right */}
+      {/* stairwell down to the catacombs, lower right.
+          Sealed: boarded over with planks. Opened: planks splintered aside,
+          revealing descending stone steps into the dark. */}
       <g>
         <path d="M214 150 l22 -42 h46 l-22 42 z" fill="#070409" stroke="#2a2030" strokeWidth="2" />
-        <g stroke="#5a3f28" strokeWidth="5">
-          <line x1="224" y1="146" x2="270" y2="120" />
-          <line x1="220" y1="134" x2="266" y2="108" />
-        </g>
-        <line x1="218" y1="150" x2="274" y2="118" stroke="#3b2a1c" strokeWidth="2" />
+        {opened ? (
+          <>
+            {/* descending steps into the black */}
+            <g fill="#15121b" stroke="#2a2030" strokeWidth="1">
+              <path d="M218 148 l40 0 l-3 6 l-40 0 z" />
+              <path d="M222 140 l40 0 l-3 6 l-40 0 z" />
+              <path d="M226 132 l40 0 l-3 6 l-40 0 z" />
+              <path d="M230 124 l40 0 l-3 6 l-40 0 z" />
+            </g>
+            {/* the two pried-off planks, splintered aside */}
+            <g stroke="#5a3f28" strokeWidth="5" strokeLinecap="round">
+              <line x1="206" y1="150" x2="232" y2="166" transform="rotate(-18 206 150)" />
+              <line x1="270" y1="118" x2="296" y2="112" transform="rotate(20 270 118)" />
+            </g>
+          </>
+        ) : (
+          <>
+            <g stroke="#5a3f28" strokeWidth="5">
+              <line x1="224" y1="146" x2="270" y2="120" />
+              <line x1="220" y1="134" x2="266" y2="108" />
+            </g>
+            <line x1="218" y1="150" x2="274" y2="118" stroke="#3b2a1c" strokeWidth="2" />
+          </>
+        )}
       </g>
       {/* straw and floor */}
       <rect x="0" y="152" width="320" height="28" fill="#0a0710" />
@@ -505,14 +582,10 @@ function ChapelScene() {
           </g>
         ))}
       </g>
-      {/* spiral stair up to the tower, right */}
+      {/* spiral staircase up to the tower, right */}
       <g>
-        <path d="M250 150 v-86 a26 26 0 0 1 52 0 v86 z" fill="#120f1c" stroke="#2e2840" strokeWidth="2" />
-        <g stroke="#2e2840" strokeWidth="3">
-          {[70, 88, 106, 124, 142].map((y) => (
-            <line key={y} x1="252" y1={y} x2="300" y2={y - 6} />
-          ))}
-        </g>
+        <path d="M246 150 v-82 a30 30 0 0 1 60 0 v82 z" fill="#17131f" stroke="#2c2740" strokeWidth="2" />
+        <SpiralStair cx={276} baseY={148} steps={9} />
       </g>
       <rect x="0" y="152" width="320" height="28" fill="#080610" />
     </svg>
@@ -545,19 +618,62 @@ function BellTowerScene() {
         <rect x="296" y="0" width="24" height="180" />
         <rect x="150" y="0" width="20" height="180" />
       </g>
-      {/* support beam + four bells, each marked with its sign */}
-      <rect x="24" y="30" width="272" height="8" fill="#2a1d14" />
+      {/* heavy wooden support beam */}
+      <rect x="24" y="28" width="272" height="9" rx="1" fill="#2a1d14" stroke="#1a120c" strokeWidth="1" />
+      {/* four cast bells hung from ropes on the beam, each with its sign */}
       {[
-        { x: 78, s: '🐺' },
-        { x: 130, s: '🌙' },
-        { x: 196, s: '🌆' },
-        { x: 248, s: '🐦' },
-      ].map(({ x, s }) => (
+        { x: 78, sign: 'wolf' },
+        { x: 130, sign: 'moon' },
+        { x: 196, sign: 'dusk' },
+        { x: 248, sign: 'raven' },
+      ].map(({ x, sign }) => (
         <g key={x}>
-          <line x1={x} y1="38" x2={x} y2="58" stroke="#1a120c" strokeWidth="2" />
-          <path d={`M${x - 16} 96 a16 16 0 0 1 32 0 q0 6 -4 6 h-24 q-4 0 -4 -6 z`} fill="#b8954f" stroke="#7a6326" strokeWidth="1" />
-          <rect x={x - 3} y="100" width="6" height="8" fill="#7a6326" />
-          <text x={x} y="126" fontSize="13" textAnchor="middle">{s}</text>
+          {/* twisted rope from the beam down to the yoke */}
+          <path d={`M${x - 1.4} 37 q-2.5 9 0 18`} fill="none" stroke="#6a5536" strokeWidth="1.4" />
+          <path d={`M${x + 1.4} 37 q2.5 9 0 18`} fill="none" stroke="#8a7048" strokeWidth="1.4" />
+          {/* yoke bar + headstock pins */}
+          <rect x={x - 11} y="54" width="22" height="4" rx="1.5" fill="#3b2a1c" />
+          <circle cx={x - 9} cy="56" r="1.6" fill="#1a120c" />
+          <circle cx={x + 9} cy="56" r="1.6" fill="#1a120c" />
+          {/* crown loop joining bell to yoke */}
+          <path d={`M${x - 3} 58 a3 3 0 0 1 6 0`} fill="none" stroke="#7a6326" strokeWidth="2" />
+          {/* bell body */}
+          <path
+            d={`M${x - 17} 98 C${x - 22} 84 ${x - 15} 66 ${x - 8} 61 L${x - 8} 58
+                Q${x} 55 ${x + 8} 58 L${x + 8} 61 C${x + 15} 66 ${x + 22} 84 ${x + 17} 98
+                Q${x} 104 ${x - 17} 98 Z`}
+            fill="#b8954f"
+            stroke="#7a6326"
+            strokeWidth="1.2"
+          />
+          {/* shading highlight for volume */}
+          <path d={`M${x - 9} 96 C${x - 13} 84 ${x - 8} 68 ${x - 3} 62`} fill="none" stroke="#e8c987" strokeWidth="1.6" opacity="0.6" />
+          {/* hollow mouth + clapper */}
+          <ellipse cx={x} cy="98" rx="15" ry="3.5" fill="#4a3a1a" />
+          <line x1={x} y1="66" x2={x} y2="99" stroke="#5a4a24" strokeWidth="1.4" />
+          <circle cx={x} cy="100" r="2.6" fill="#3a2c14" />
+          {/* sign below the bell */}
+          {sign === 'wolf' && <text x={x} y="124" fontSize="13" textAnchor="middle">🐺</text>}
+          {sign === 'moon' && (
+            <path d={`M${x + 4} 114 a7 7 0 1 1 -6 -11 a5.5 5.5 0 0 0 6 11 z`} fill="#e8e2c0" />
+          )}
+          {sign === 'dusk' && (
+            <g>
+              <circle cx={x} cy="118" r="5.5" fill="#e0894a" />
+              <rect x={x - 9} y="118" width="18" height="6" fill="#0a0d18" />
+              <line x1={x - 11} y1="118" x2={x + 11} y2="118" stroke="#e0894a" strokeWidth="1" />
+            </g>
+          )}
+          {sign === 'raven' && (
+            <g fill="#0b0b12">
+              {/* perched black raven */}
+              <ellipse cx={x - 1} cy="118" rx="7.5" ry="4.2" transform={`rotate(-12 ${x - 1} 118)`} />
+              <circle cx={x + 5} cy="113" r="2.8" />
+              <path d={`M${x + 7} 112 l5 1.4 l-5 1.4 z`} />
+              <path d={`M${x - 8} 119 l-6 2.5 l5 -3.6 z`} />
+              <path d={`M${x - 2} 115 q6 -3 10 0 q-6 1 -10 0 z`} fill="#15151f" />
+            </g>
+          )}
         </g>
       ))}
       <rect x="0" y="150" width="320" height="30" fill="#0a0d18" />
