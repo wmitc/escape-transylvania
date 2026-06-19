@@ -110,12 +110,21 @@ function DungeonScene() {
         <path d="M249 24 q-9 8 -4 16 q9 -2 8 -10 q4 8 -1 14 q11 -3 9 -16 q-7 4 -7 -2 q-3 5 -5 -2 z" fill="#e8a04a" />
         <path d="M249 28 q-5 6 -2 11 q6 -2 4 -8 q3 5 0 9 q6 -3 5 -10 q-5 3 -6 -1 z" fill="#f7d97a" />
       </g>
+      {/* boarded-over stairwell down to the catacombs, lower right */}
+      <g>
+        <path d="M214 150 l22 -42 h46 l-22 42 z" fill="#070409" stroke="#2a2030" strokeWidth="2" />
+        <g stroke="#5a3f28" strokeWidth="5">
+          <line x1="224" y1="146" x2="270" y2="120" />
+          <line x1="220" y1="134" x2="266" y2="108" />
+        </g>
+        <line x1="218" y1="150" x2="274" y2="118" stroke="#3b2a1c" strokeWidth="2" />
+      </g>
       {/* straw and floor */}
-      <rect x="0" y="150" width="320" height="30" fill="#0a0710" />
+      <rect x="0" y="152" width="320" height="28" fill="#0a0710" />
       <g stroke="#7a6326" strokeWidth="2" opacity="0.8">
-        {Array.from({ length: 18 }, (_, i) => {
-          const x = 60 + i * 5
-          return <line key={i} x1={x} y1="158" x2={x + (i % 3) - 1} y2="148" />
+        {Array.from({ length: 16 }, (_, i) => {
+          const x = 70 + i * 5
+          return <line key={i} x1={x} y1="160" x2={x + (i % 3) - 1} y2="150" />
         })}
       </g>
     </svg>
@@ -136,11 +145,12 @@ function GreatHallScene() {
         </linearGradient>
       </defs>
       <rect width="320" height="180" fill="url(#gh-wall)" />
-      {/* four archway passages — one per exit (dungeon, library, lab, gate) */}
-      <Archway cx={38} />
-      <Archway cx={115} />
-      <Archway cx={205} />
-      <Archway cx={282} />
+      {/* five archway passages — one per exit (dungeon, library, chapel, lab, gate) */}
+      <Archway cx={35} />
+      <Archway cx={95} />
+      <Archway cx={160} />
+      <Archway cx={225} />
+      <Archway cx={285} />
       {/* grand portrait, centre */}
       <g>
         <rect x="126" y="22" width="68" height="80" rx="2" fill="#1a1018" stroke="#b8954f" strokeWidth="4" />
@@ -318,6 +328,16 @@ function AlchemyLabScene() {
       </g>
       {/* floor */}
       <rect x="0" y="150" width="320" height="30" fill="#06100d" />
+      {/* open trapdoor down to the cellar, centre floor */}
+      <g>
+        <rect x="138" y="150" width="44" height="26" fill="#040807" stroke="#0c1c18" strokeWidth="2" />
+        <path d="M138 150 l-14 -10 l44 0 l14 10 z" fill="#163028" stroke="#0c1c18" strokeWidth="1.5" />
+        <g stroke="#0a1512" strokeWidth="1.5">
+          <line x1="146" y1="156" x2="146" y2="174" />
+          <line x1="160" y1="156" x2="160" y2="174" />
+          <line x1="174" y1="156" x2="174" y2="174" />
+        </g>
+      </g>
     </svg>
   )
 }
@@ -398,11 +418,199 @@ function GateScene() {
   )
 }
 
+function CatacombsScene() {
+  return (
+    <svg {...sceneProps}>
+      <defs>
+        <linearGradient id="cat-wall" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#262430" />
+          <stop offset="1" stopColor="#0a0a10" />
+        </linearGradient>
+      </defs>
+      <rect width="320" height="180" fill="url(#cat-wall)" />
+      {/* vaulted bone tunnel */}
+      <path d="M0 70 q160 -70 320 0 v110 h-320 z" fill="#15141d" />
+      {/* stacked skulls texture along the top */}
+      <g fill="#cfc8b8" opacity="0.5">
+        {Array.from({ length: 12 }, (_, i) => (
+          <circle key={i} cx={18 + i * 26} cy={26 + (i % 2) * 6} r="6" />
+        ))}
+      </g>
+      {/* inscription plaque, left */}
+      <g>
+        <rect x="44" y="58" width="44" height="34" rx="2" fill="#1b1a24" stroke="#3a3850" strokeWidth="2" />
+        <g stroke="#5a5870" strokeWidth="1.5" opacity="0.8">
+          <line x1="50" y1="66" x2="82" y2="66" />
+          <line x1="50" y1="72" x2="82" y2="72" />
+          <line x1="50" y1="78" x2="78" y2="78" />
+          <line x1="50" y1="84" x2="82" y2="84" />
+        </g>
+      </g>
+      {/* four niches with skulls */}
+      <g>
+        {[140, 168, 196, 224].map((x) => (
+          <g key={x}>
+            <path d={`M${x} 118 v-20 a8 8 0 0 1 16 0 v20 z`} fill="#08070c" stroke="#33313f" strokeWidth="1.5" />
+            <circle cx={x + 8} cy="104" r="5.5" fill="#d8d2c2" />
+            <circle cx={x + 6} cy="103" r="1.2" fill="#0a0a0a" />
+            <circle cx={x + 10} cy="103" r="1.2" fill="#0a0a0a" />
+          </g>
+        ))}
+      </g>
+      {/* stairs up, right */}
+      <g>
+        <path d="M256 150 l22 -42 h34 v42 z" fill="#08070c" stroke="#33313f" strokeWidth="2" />
+        <g stroke="#3a3850" strokeWidth="3">
+          <line x1="262" y1="148" x2="300" y2="126" />
+          <line x1="266" y1="136" x2="304" y2="116" />
+        </g>
+      </g>
+      <rect x="0" y="150" width="320" height="30" fill="#070710" />
+    </svg>
+  )
+}
+
+function ChapelScene() {
+  return (
+    <svg {...sceneProps}>
+      <defs>
+        <linearGradient id="ch-wall" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#2a2436" />
+          <stop offset="1" stopColor="#0a0810" />
+        </linearGradient>
+        <radialGradient id="ch-rose" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stopColor="#cdd8f0" />
+          <stop offset="1" stopColor="#3a4668" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="320" height="180" fill="url(#ch-wall)" />
+      {/* rose window with moonlight */}
+      <circle cx="160" cy="42" r="34" fill="url(#ch-rose)" />
+      <circle cx="160" cy="42" r="24" fill="#10162c" stroke="#3a3656" strokeWidth="2" />
+      <g stroke="#3a3656" strokeWidth="2">
+        <line x1="136" y1="42" x2="184" y2="42" />
+        <line x1="160" y1="18" x2="160" y2="66" />
+        <line x1="143" y1="25" x2="177" y2="59" />
+        <line x1="177" y1="25" x2="143" y2="59" />
+      </g>
+      {/* altar with reliquary and black candles */}
+      <g>
+        <rect x="128" y="96" width="64" height="46" fill="#1c1726" stroke="#3a3252" strokeWidth="2" />
+        <rect x="144" y="108" width="32" height="22" rx="1" fill="#0c0a14" stroke="#7a6a9a" strokeWidth="1.5" />
+        <circle cx="160" cy="119" r="2" fill="#b8954f" />
+        {[134, 186].map((x) => (
+          <g key={x}>
+            <rect x={x - 2} y="84" width="4" height="14" fill="#15121c" />
+            <path d={`M${x} 76 q-4 5 0 9 q4 -4 0 -9 z`} fill="#f0d9a0" />
+          </g>
+        ))}
+      </g>
+      {/* spiral stair up to the tower, right */}
+      <g>
+        <path d="M250 150 v-86 a26 26 0 0 1 52 0 v86 z" fill="#120f1c" stroke="#2e2840" strokeWidth="2" />
+        <g stroke="#2e2840" strokeWidth="3">
+          {[70, 88, 106, 124, 142].map((y) => (
+            <line key={y} x1="252" y1={y} x2="300" y2={y - 6} />
+          ))}
+        </g>
+      </g>
+      <rect x="0" y="152" width="320" height="28" fill="#080610" />
+    </svg>
+  )
+}
+
+function BellTowerScene() {
+  return (
+    <svg {...sceneProps}>
+      <defs>
+        <linearGradient id="bt-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#1a2740" />
+          <stop offset="1" stopColor="#0a0d18" />
+        </linearGradient>
+        <radialGradient id="bt-moon" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stopColor="#f2f5ff" />
+          <stop offset="1" stopColor="#8aa0c8" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect width="320" height="180" fill="url(#bt-sky)" />
+      {/* open belfry arches showing the night sky + moon */}
+      <circle cx="60" cy="58" r="22" fill="url(#bt-moon)" />
+      <circle cx="60" cy="58" r="11" fill="#eef2ff" />
+      <g fill="#0c1020" stroke="#23304c" strokeWidth="3">
+        <path d="M16 150 v-70 a30 30 0 0 1 60 0 v70 z" opacity="0.0" />
+      </g>
+      {/* stone pillars framing the open arches */}
+      <g fill="#161a28">
+        <rect x="0" y="0" width="24" height="180" />
+        <rect x="296" y="0" width="24" height="180" />
+        <rect x="150" y="0" width="20" height="180" />
+      </g>
+      {/* support beam + four bells */}
+      <rect x="24" y="30" width="272" height="8" fill="#2a1d14" />
+      {[
+        { x: 78, s: '🐺' },
+        { x: 130, s: '🌙' },
+        { x: 196, s: '🌆' },
+        { x: 248, s: '🐦' },
+      ].map(({ x }) => (
+        <g key={x}>
+          <line x1={x} y1="38" x2={x} y2="58" stroke="#1a120c" strokeWidth="2" />
+          <path d={`M${x - 16} 96 a16 16 0 0 1 32 0 q0 6 -4 6 h-24 q-4 0 -4 -6 z`} fill="#b8954f" stroke="#7a6326" strokeWidth="1" />
+          <rect x={x - 3} y="100" width="6" height="8" fill="#7a6326" />
+        </g>
+      ))}
+      <rect x="0" y="150" width="320" height="30" fill="#0a0d18" />
+    </svg>
+  )
+}
+
+function WineCellarScene() {
+  return (
+    <svg {...sceneProps}>
+      <defs>
+        <linearGradient id="wc-wall" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#2a1d1a" />
+          <stop offset="1" stopColor="#0a0604" />
+        </linearGradient>
+      </defs>
+      <rect width="320" height="180" fill="url(#wc-wall)" />
+      {/* brick vault arch */}
+      <path d="M0 64 q160 -56 320 0 v116 h-320 z" fill="#1c1310" />
+      <StoneCourses fill="#000" opacity={0.25} />
+      {/* a rack of barrels along the back */}
+      <g>
+        {[40, 92, 144, 232, 284].map((x) => (
+          <g key={x}>
+            <ellipse cx={x} cy="92" rx="20" ry="24" fill="#3b2a1c" stroke="#241a10" strokeWidth="2" />
+            <ellipse cx={x} cy="92" rx="12" ry="22" fill="#4a3520" />
+            <line x1={x - 20} y1="92" x2={x + 20} y2="92" stroke="#241a10" strokeWidth="2" />
+            <line x1={x - 18} y1="80" x2={x + 18} y2="80" stroke="#241a10" strokeWidth="1.5" />
+            <line x1={x - 18} y1="104" x2={x + 18} y2="104" stroke="#241a10" strokeWidth="1.5" />
+          </g>
+        ))}
+      </g>
+      {/* balance scale, centre-front */}
+      <g stroke="#6a5a3a" strokeWidth="2" fill="#8a7340">
+        <rect x="158" y="96" width="4" height="44" />
+        <line x1="134" y1="100" x2="186" y2="100" />
+        <path d="M134 100 l-8 12 h16 z" fill="#5a4a24" />
+        <path d="M186 100 l-8 12 h16 z" fill="#5a4a24" />
+        <rect x="150" y="140" width="20" height="6" />
+      </g>
+      <rect x="0" y="152" width="320" height="28" fill="#0a0604" />
+    </svg>
+  )
+}
+
 /** Maps each room id to its scene art. Swap an entry to replace a room's art. */
 export const SCENE_ART: Record<RoomId, () => ReactElement> = {
   dungeon: DungeonScene,
+  catacombs: CatacombsScene,
   'great-hall': GreatHallScene,
   library: LibraryScene,
+  chapel: ChapelScene,
+  'bell-tower': BellTowerScene,
   'alchemy-lab': AlchemyLabScene,
+  'wine-cellar': WineCellarScene,
   gate: GateScene,
 }

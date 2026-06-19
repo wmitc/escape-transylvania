@@ -5,6 +5,10 @@ import { useGameStore, WRONG_ANSWER_PENALTY_SEC } from '../state/gameStore'
 import { CombinationLock } from '../puzzles/CombinationLock'
 import { Cipher } from '../puzzles/Cipher'
 import { Matching } from '../puzzles/Matching'
+import { Ordering } from '../puzzles/Ordering'
+import { Riddle } from '../puzzles/Riddle'
+import { Sequence } from '../puzzles/Sequence'
+import { Weighing } from '../puzzles/Weighing'
 
 /**
  * Overlay that hosts the active puzzle. Renders the right puzzle UI for the
@@ -48,6 +52,18 @@ export function PuzzleModal({ puzzleId }: { puzzleId: PuzzleId }) {
           <Cipher puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
         )}
         {puzzle.type === 'matching' && <Matching puzzle={puzzle} onSolved={handleSolved} />}
+        {puzzle.type === 'ordering' && (
+          <Ordering puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
+        )}
+        {puzzle.type === 'riddle' && (
+          <Riddle puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
+        )}
+        {puzzle.type === 'sequence' && (
+          <Sequence puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
+        )}
+        {puzzle.type === 'weighing' && (
+          <Weighing puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
+        )}
 
         {rewardItem && (
           <p className="modal-reward">

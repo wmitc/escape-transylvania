@@ -6,7 +6,14 @@ import type { ItemId, PuzzleId } from '../types'
  * to render and validate the puzzle, so adding a puzzle is mostly editing data.
  */
 
-export type PuzzleType = 'combination' | 'cipher' | 'matching'
+export type PuzzleType =
+  | 'combination'
+  | 'cipher'
+  | 'matching'
+  | 'ordering'
+  | 'riddle'
+  | 'sequence'
+  | 'weighing'
 
 interface PuzzleBase {
   id: PuzzleId
@@ -50,10 +57,52 @@ export interface MatchingPuzzle extends PuzzleBase {
   pairs: { left: string; right: string }[]
 }
 
-export type Puzzle = CombinationPuzzle | CipherPuzzle | MatchingPuzzle
+/** Arrange tiles into the correct order using the clues in the prompt. */
+export interface OrderingPuzzle extends PuzzleBase {
+  type: 'ordering'
+  /** Tiles to arrange (shown shuffled). */
+  tiles: { id: string; label: string }[]
+  /** The correct ordering, top to bottom, as tile ids. */
+  solution: string[]
+}
+
+/** Answer a riddle by typing the solution (compared case-insensitively). */
+export interface RiddlePuzzle extends PuzzleBase {
+  type: 'riddle'
+  riddle: string
+  solution: string
+}
+
+/** Press the buttons in the correct order. */
+export interface SequencePuzzle extends PuzzleBase {
+  type: 'sequence'
+  buttons: { id: string; label: string }[]
+  /** Correct press order, as button ids. */
+  solution: string[]
+}
+
+/** Use a balance to find the one odd-weight barrel, then accuse it. */
+export interface WeighingPuzzle extends PuzzleBase {
+  type: 'weighing'
+  /** Number of barrels (labelled 1..count). */
+  count: number
+  /** Index (0-based) of the odd barrel. */
+  oddIndex: number
+  /** True if the odd barrel is heavier than the rest. */
+  heavier: boolean
+}
+
+export type Puzzle =
+  | CombinationPuzzle
+  | CipherPuzzle
+  | MatchingPuzzle
+  | OrderingPuzzle
+  | RiddlePuzzle
+  | SequencePuzzle
+  | WeighingPuzzle
 
 export const PUZZLES: Record<PuzzleId, Puzzle> = {
-  // Dungeon — match each omen to its companion to spring the iron lockbox.
+  // Dungeon — match each omen to its companion to spring the lockbox (yields a crowbar).
   'cell-lock': {
     id: 'cell-lock',
     type: 'matching',
@@ -69,11 +118,45 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     requiresItemId: 'rusty-nail',
     requiresItemMessage:
       'The lid is pinned shut. You need something thin to pry the catch — a nail, perhaps.',
-    rewardItemId: 'iron-key',
-    successMessage: 'You pry the catch with the nail and it springs open. Inside lies a cold Iron Key.',
+    rewardItemId: 'crowbar',
+    successMessage: 'You pry the catch with the nail. Inside lies a heavy iron crowbar.',
   },
 
-  // Library — decode the Count's cipher using the tome (shift each letter back by 3).
+  // Catacombs — order the dead by the clues carved above the niches; opens the relic niche.
+  'catacombs-order': {
+    id: 'catacombs-order',
+    type: 'ordering',
+    title: 'The Ossuary Niches',
+    prompt:
+      'Four of the Count\'s servants lie here. An inscription decrees the order they must rest in:\n' +
+      '"The Priest was first to die. The Knight outlived the Maid. The Jester was buried last, ' +
+      'and the Maid before the Knight." Arrange them, first to last.',
+    tiles: [
+      { id: 'priest', label: '⛪ Priest' },
+      { id: 'maid', label: '🌹 Maid' },
+      { id: 'knight', label: '⚔️ Knight' },
+      { id: 'jester', label: '🃏 Jester' },
+    ],
+    solution: ['priest', 'maid', 'knight', 'jester'],
+    rewardItemId: 'iron-key',
+    successMessage: 'The niches grind into place and one swings open — an Iron Key rests inside.',
+  },
+
+  // Chapel — answer the altar's riddle to open the reliquary (yields the tome).
+  'chapel-riddle': {
+    id: 'chapel-riddle',
+    type: 'riddle',
+    title: 'The Altar Riddle',
+    prompt: 'Words are carved into the desecrated altar:',
+    riddle:
+      'I am drunk by the dead and feared by the living, the Count\'s only wine, the river ' +
+      'of giving. One word — what am I?',
+    solution: 'blood',
+    rewardItemId: 'book',
+    successMessage: 'The reliquary clicks open. Within rests a cracked leather tome.',
+  },
+
+  // Library — decode the Count's cipher (needs the tome); reveals the bell-ringing order.
   'library-cipher': {
     id: 'library-cipher',
     type: 'cipher',
@@ -84,9 +167,45 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     ciphertext: 'WKH FRXQW',
     solution: 'THE COUNT',
     requiresItemId: 'book',
-    requiresItemMessage: 'The cipher is meaningless without the key. Perhaps a book explains it.',
+    requiresItemMessage: 'The cipher is meaningless without the key. Perhaps a tome explains it.',
+    flag: 'bell-order-known',
+    successMessage:
+      'The drawer opens onto sheet music titled "To Wake the Tower." The bells ring in order: ' +
+      'Dusk, Raven, Moon, Wolf.',
+  },
+
+  // Bell Tower — ring the bells in the order learned from the library's sheet music.
+  'bell-sequence': {
+    id: 'bell-sequence',
+    type: 'sequence',
+    title: 'The Four Bells',
+    prompt:
+      'Four bells hang in the tower. Ring them in the order the sheet music decreed ' +
+      '(found in the library).',
+    buttons: [
+      { id: 'wolf', label: '🐺 Wolf' },
+      { id: 'moon', label: '🌙 Moon' },
+      { id: 'dusk', label: '🌆 Dusk' },
+      { id: 'raven', label: '🐦‍⬛ Raven' },
+    ],
+    solution: ['dusk', 'raven', 'moon', 'wolf'],
     rewardItemId: 'silver-key',
-    successMessage: 'The drawer slides open, revealing a tarnished Silver Key.',
+    successMessage: 'The bells peal in harmony. Something drops from the belfry — a Silver Key.',
+  },
+
+  // Wine Cellar — find the one barrel that isn't wine using the balance; it hides the vial.
+  'cellar-weighing': {
+    id: 'cellar-weighing',
+    type: 'weighing',
+    title: 'The Odd Barrel',
+    prompt:
+      'Six barrels line the wall. Five hold wine and weigh the same; one is heavier — filled ' +
+      'with something else. Use the balance to find the heavy barrel, then breach it.',
+    count: 6,
+    oddIndex: 3,
+    heavier: true,
+    rewardItemId: 'vial',
+    successMessage: 'You stave in the heavy barrel. Nestled in sand is a crimson vial.',
   },
 
   // Alchemy Lab — pour the crimson vial into the cauldron to reveal the code, then dial it.

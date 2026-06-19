@@ -544,3 +544,163 @@
   cursor: default;
   border-color: rgba(120, 200, 120, 0.6);
 }
+
+/* Ordering puzzle */
+.order-list {
+  list-style: none;
+  margin: 0 0 0.5rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.order-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.7rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(192, 57, 43, 0.35);
+  border-radius: 6px;
+}
+
+.order-rank {
+  font-family: var(--font-display);
+  color: var(--color-candle);
+  width: 1.3rem;
+  text-align: center;
+}
+
+.order-label {
+  flex: 1;
+}
+
+.order-controls {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.order-controls button {
+  background: transparent;
+  border: 1px solid rgba(232, 201, 135, 0.4);
+  border-radius: 4px;
+  color: var(--color-candle);
+  cursor: pointer;
+  width: 1.6rem;
+}
+
+.order-controls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Riddle */
+.riddle__text {
+  margin: 0 0 1rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+/* Sequence (bells) */
+.bell-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.bell {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 0.7rem 0.9rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(232, 201, 135, 0.45);
+  border-radius: 8px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.bell:hover {
+  background: rgba(232, 201, 135, 0.12);
+}
+
+/* Weighing (barrels + balance) */
+.barrel-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.barrel {
+  position: relative;
+  font-size: 1.5rem;
+  width: 3rem;
+  height: 3rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  border-radius: 8px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.barrel.is-on-pan {
+  border-color: var(--color-candle);
+  box-shadow: 0 0 8px rgba(232, 201, 135, 0.5);
+}
+
+.barrel.is-accuse {
+  border-color: rgba(192, 57, 43, 0.8);
+}
+
+.barrel__num {
+  position: absolute;
+  bottom: 1px;
+  right: 3px;
+  font-size: 0.6rem;
+  color: var(--color-text-dim);
+}
+
+.barrel__pan {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  font-size: 0.6rem;
+  background: var(--color-candle);
+  color: #1a1018;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.weigh-pans {
+  text-align: center;
+  color: var(--color-text-dim);
+  margin: 0.25rem 0;
+}
+
+.weigh-result {
+  text-align: center;
+  color: var(--color-candle);
+  font-style: italic;
+  margin: 0.5rem 0 0;
+}
+
+.hint__toggle {
+  display: block;
+  margin: 0.9rem auto 0;
+  background: transparent;
+  border: 1px dashed rgba(232, 201, 135, 0.5);
+  border-radius: 6px;
+  color: var(--color-candle);
+  font-family: var(--font-body);
+  font-style: italic;
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}

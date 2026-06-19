@@ -52,6 +52,8 @@ src/
 3. ✅ **Puzzles & keys** — puzzle panels, item use, collect 3 keys to unlock the gate.
 4. ✅ **Polish** — save/reset, intro & win screens, gothic styling pass.
 5. ✅ **CI & deploy** — automated tests and GitHub Pages deployment.
+6. ✅ **Expansion** — nine rooms, seven puzzle types, cross-room dependencies, select-to-use
+   items, and a before-dawn countdown.
 
 ## Testing
 
@@ -72,9 +74,21 @@ and, if green, **deploys** to GitHub Pages (`.github/workflows/deploy.yml`).
 ## How the game is structured
 
 Rooms, items, and puzzles are defined as **data** (in `src/data/`), and generic components
-render them. Adding new content is mostly editing data — not writing new components. The castle
-has five rooms: the Dungeon (start), the Great Hall (hub), the Library, the Alchemy Lab, and the
-Castle Gate (the exit, which opens once you hold all three keys).
+render them. Adding new content is mostly editing data — not writing new components.
+
+The castle has **nine rooms**: the Dungeon (start), the Catacombs, the Great Hall (hub), the
+Library, the Chapel, the Bell Tower, the Alchemy Lab, the Wine Cellar, and the Castle Gate.
+Three rooms are **dark** (Library, Catacombs, Wine Cellar) and need the torch to see in.
+
+Progression is a chain of **seven puzzles** (matching, ordering, riddle, cipher, sequence,
+weighing, combination) with **cross-room dependencies** — e.g. the lockbox yields a crowbar
+that pries open the catacombs; the library cipher reveals the order to ring the bell tower;
+the wine cellar's vial reveals the lab cabinet's code. Solving them earns the iron, silver,
+and bone keys, which are **set into the gate's three keyholes** to escape.
+
+**Items** use a *select-then-use* model: click an item in the satchel, then click the object
+in the scene to use it on. A **countdown to dawn** runs throughout; wrong answers on a lock
+cost time, and if dawn breaks you lose.
 
 ---
 
