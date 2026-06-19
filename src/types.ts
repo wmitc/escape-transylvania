@@ -33,6 +33,7 @@ export type Hotspot =
   | PuzzleHotspot
   | KeyholeHotspot
   | ApplyHotspot
+  | BellHotspot
   | ExitHotspot
 
 interface HotspotBase {
@@ -74,6 +75,17 @@ export interface KeyholeHotspot extends HotspotBase {
   keyItemId: ItemId
   /** Flag set once the key is inserted. */
   placedFlag: string
+}
+
+/** A bell you ring by clicking it. Plays a tone and advances a sequence puzzle. */
+export interface BellHotspot extends HotspotBase {
+  type: 'bell'
+  /** Identifier matched against the sequence puzzle's solution. */
+  bellId: string
+  /** MIDI note this bell sounds when rung. */
+  note: number
+  /** The sequence puzzle this bell belongs to. */
+  puzzleId: PuzzleId
 }
 
 /** Apply (consume) an item here to reveal something and set a flag. */

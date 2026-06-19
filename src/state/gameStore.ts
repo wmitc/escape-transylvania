@@ -27,6 +27,8 @@ interface GameState {
   selectedItemId: ItemId | null
   /** Puzzle whose panel is currently open, if any. */
   activePuzzleId: PuzzleId | null
+  /** Bell ids rung so far in the current attempt (bell-tower sequence). */
+  bellsRung: string[]
   /** Epoch ms when dawn breaks and the game is lost; null until the game starts. */
   deadlineAt: number | null
   /** Whether background music is on. */
@@ -42,6 +44,7 @@ interface GameState {
   toggleSound: () => void
   enterRoom: (roomId: RoomId) => void
   collectItem: (hotspotId: HotspotId, itemId: ItemId, description: string) => void
+  ringBell: (bellId: string, puzzleId: PuzzleId) => void
   insertKey: (keyItemId: ItemId, placedFlag: string) => void
   applyItem: (
     itemId: ItemId,
@@ -70,6 +73,7 @@ const initialState = {
   flags: {} as Record<string, boolean>,
   selectedItemId: null as ItemId | null,
   activePuzzleId: null as PuzzleId | null,
+  bellsRung: [] as string[],
   deadlineAt: null as number | null,
   soundOn: true,
   message: null as string | null,
@@ -100,7 +104,8 @@ export const useGameStore = create<GameState>()(
 
       toggleSound: () => set((state) => ({ soundOn: !state.soundOn })),
 
-      enterRoom: (roomId) => set({ currentRoomId: roomId, message: null, selectedItemId: null }),
+      enterRoom: (roomId) =>
+        set({ currentRoomId: roomId, message: null, selectedItemId: null, bellsRung: [] }),
 
       collectItem: (hotspotId, itemId, description) =>
         set((state) => {
@@ -112,6 +117,41 @@ export const useGameStore = create<GameState>()(
               : [...state.inventory, itemId],
             collectedHotspots: [...state.collectedHotspots, hotspotId],
             message: description || `You picked up the ${item?.name ?? itemId}.`,
+          }
+        }),
+
+      // Ring a bell. Correct bells advance the sequence; a wrong one resets it.
+      // Completing the order solves the puzzle and grants its reward.
+      ringBell: (bellId, puzzleId) =>
+        set((state) => {
+          const puzzle = PUZZLES[puzzleId]
+          if (!puzzle || puzzle.type !== 'sequence') return state
+          if (state.solvedPuzzles.includes(puzzleId)) {
+            return { message: 'The bells hang silent — their work is done.' }
+          }
+          const labelOf = (id: string) =>
+            puzzle.buttons.find((b) => b.id === id)?.label ?? id
+
+          if (bellId !== puzzle.solution[state.bellsRung.length]) {
+            return { message: 'A sour note rings out — the bells fall silent and reset.', bellsRung: [] }
+          }
+
+          const rung = [...state.bellsRung, bellId]
+          if (rung.length < puzzle.solution.length) {
+            return {
+              bellsRung: rung,
+              message: `${labelOf(bellId)} tolls… (${rung.length}/${puzzle.solution.length})`,
+            }
+          }
+          // Completed in the right order.
+          const reward = puzzle.rewardItemId ? [puzzle.rewardItemId] : []
+          const newItems = reward.filter((id) => !state.inventory.includes(id))
+          return {
+            bellsRung: [],
+            solvedPuzzles: [...state.solvedPuzzles, puzzleId],
+            inventory: [...state.inventory, ...newItems],
+            flags: puzzle.flag ? { ...state.flags, [puzzle.flag]: true } : state.flags,
+            message: puzzle.successMessage,
           }
         }),
 
@@ -228,13 +268,15 @@ export const useGameStore = create<GameState>()(
           }
         }),
 
+      // Selecting an item shows what it is / what it says (so notes and the
+      // sheet music can be read); the satchel footer shows the "click to use" hint.
       selectItem: (itemId) =>
         set((state) => {
           const deselect = state.selectedItemId === itemId
           const item = itemId ? ITEMS[itemId] : undefined
           return {
             selectedItemId: deselect ? null : itemId,
-            message: deselect || !item ? null : `${item.name} selected — now click where to use it.`,
+            message: deselect || !item ? null : item.description,
           }
         }),
 

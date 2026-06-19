@@ -7,7 +7,6 @@ import { Cipher } from '../puzzles/Cipher'
 import { Matching } from '../puzzles/Matching'
 import { Ordering } from '../puzzles/Ordering'
 import { Riddle } from '../puzzles/Riddle'
-import { Sequence } from '../puzzles/Sequence'
 import { Weighing } from '../puzzles/Weighing'
 
 /**
@@ -57,9 +56,6 @@ export function PuzzleModal({ puzzleId }: { puzzleId: PuzzleId }) {
         )}
         {puzzle.type === 'riddle' && (
           <Riddle puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
-        )}
-        {puzzle.type === 'sequence' && (
-          <Sequence puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />
         )}
         {puzzle.type === 'weighing' && (
           <Weighing puzzle={puzzle} onSolved={handleSolved} onWrong={handleWrong} />

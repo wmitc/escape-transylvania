@@ -89,6 +89,33 @@ function tick() {
   step += 1
 }
 
+/** Play a single bell-like tone at the given MIDI note (one-shot sound effect). */
+export function playBell(note: number) {
+  try {
+    ensure()
+    if (!ctx) return
+    void ctx.resume()
+    const t = ctx.currentTime
+    const g = ctx.createGain()
+    g.gain.setValueAtTime(0.0001, t)
+    g.gain.exponentialRampToValueAtTime(0.3, t + 0.005)
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 1.8)
+    g.connect(ctx.destination) // independent of the music bus, so the bell rings clearly
+    for (const [mult, gain] of [[1, 1], [2, 0.4], [3, 0.18]] as const) {
+      const o = ctx.createOscillator()
+      o.type = 'sine'
+      o.frequency.value = midiToFreq(note) * mult
+      const og = ctx.createGain()
+      og.gain.value = gain
+      o.connect(og).connect(g)
+      o.start(t)
+      o.stop(t + 1.9)
+    }
+  } catch {
+    // ignore audio failures
+  }
+}
+
 /** Turn the music on or off. Safe to call before any user gesture. */
 export function setMusicEnabled(on: boolean) {
   enabled = on

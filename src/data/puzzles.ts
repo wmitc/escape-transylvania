@@ -171,10 +171,9 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     solution: 'THE COUNT',
     requiresItemId: 'book',
     requiresItemMessage: 'The cipher is meaningless without the key. Perhaps a tome explains it.',
-    flag: 'bell-order-known',
+    rewardItemId: 'sheet-music',
     successMessage:
-      'The drawer opens onto sheet music titled "To Wake the Tower." The bells ring in order: ' +
-      'Dusk, Raven, Moon, Wolf.',
+      'The drawer slides open onto a sheet of music. You pocket it — the bell tower will want this.',
   },
 
   // Bell Tower — ring the bells in the order learned from the library's sheet music.

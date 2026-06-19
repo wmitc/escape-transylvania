@@ -545,18 +545,19 @@ function BellTowerScene() {
         <rect x="296" y="0" width="24" height="180" />
         <rect x="150" y="0" width="20" height="180" />
       </g>
-      {/* support beam + four bells */}
+      {/* support beam + four bells, each marked with its sign */}
       <rect x="24" y="30" width="272" height="8" fill="#2a1d14" />
       {[
         { x: 78, s: '🐺' },
         { x: 130, s: '🌙' },
         { x: 196, s: '🌆' },
         { x: 248, s: '🐦' },
-      ].map(({ x }) => (
+      ].map(({ x, s }) => (
         <g key={x}>
           <line x1={x} y1="38" x2={x} y2="58" stroke="#1a120c" strokeWidth="2" />
           <path d={`M${x - 16} 96 a16 16 0 0 1 32 0 q0 6 -4 6 h-24 q-4 0 -4 -6 z`} fill="#b8954f" stroke="#7a6326" strokeWidth="1" />
           <rect x={x - 3} y="100" width="6" height="8" fill="#7a6326" />
+          <text x={x} y="126" fontSize="13" textAnchor="middle">{s}</text>
         </g>
       ))}
       <rect x="0" y="150" width="320" height="30" fill="#0a0d18" />
