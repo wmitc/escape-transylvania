@@ -102,14 +102,14 @@ export type Puzzle =
   | WeighingPuzzle
 
 export const PUZZLES: Record<PuzzleId, Puzzle> = {
-  // Dungeon — match each omen to its companion to spring the lockbox (yields a crowbar).
+  // Dungeon — pick the cell door's lock with the nail; opens the door and yields a crowbar.
   'cell-lock': {
     id: 'cell-lock',
     type: 'matching',
-    title: 'The Iron Lockbox',
+    title: 'The Cell Door Lock',
     prompt:
-      'A lockbox sits in the straw, its lid etched with omens. Match each omen to its ' +
-      'companion to release the catch.',
+      'The cell door is held by an old tumbler lock, its face etched with omens. Match each ' +
+      'omen to its companion and rake the pins to open it.',
     pairs: [
       { left: '🦇', right: '🌙' },
       { left: '🕷️', right: '🕸️' },
@@ -117,9 +117,12 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     ],
     requiresItemId: 'rusty-nail',
     requiresItemMessage:
-      'The lid is pinned shut. You need something thin to pry the catch — a nail, perhaps.',
+      'The lock is jammed tight. You need something thin to rake the pins — a nail, perhaps.',
+    flag: 'cell-open',
     rewardItemId: 'crowbar',
-    successMessage: 'You pry the catch with the nail. Inside lies a heavy iron crowbar.',
+    successMessage:
+      'You rake the pins with the nail and the lock gives. The cell door swings open — and a ' +
+      'crowbar that braced it clatters to the floor.',
   },
 
   // Catacombs — order the dead by the clues carved above the niches; opens the relic niche.

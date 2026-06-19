@@ -48,7 +48,6 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
       aria-label={hotspot.label}
       title={hotspot.label}
     >
-      <span className="hotspot__marker" aria-hidden="true" />
       <span className="hotspot__label">{filled ? `${hotspot.label} ✓` : hotspot.label}</span>
     </button>
   )
