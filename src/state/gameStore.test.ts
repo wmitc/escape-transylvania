@@ -116,6 +116,21 @@ describe('insertKey (select the key, then click the lock)', () => {
   })
 })
 
+describe('ringBell (bell tower)', () => {
+  it('a wrong bell resets the sequence', () => {
+    store().ringBell('wolf', 'bell-sequence') // order is dusk, raven, moon, wolf
+    expect(store().bellsRung).toEqual([])
+    expect(store().solvedPuzzles).not.toContain('bell-sequence')
+  })
+
+  it('ringing the correct order grants the silver key', () => {
+    for (const b of ['dusk', 'raven', 'moon', 'wolf']) store().ringBell(b, 'bell-sequence')
+    expect(store().solvedPuzzles).toContain('bell-sequence')
+    expect(store().inventory).toContain('silver-key')
+    expect(store().bellsRung).toEqual([])
+  })
+})
+
 describe('sound preference', () => {
   it('toggles and survives a reset', () => {
     expect(store().soundOn).toBe(true)

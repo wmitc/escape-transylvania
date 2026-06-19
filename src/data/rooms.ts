@@ -139,12 +139,18 @@ export const ROOMS: Record<RoomId, Room> = {
     name: 'The Bell Tower',
     description:
       'Wind howls through the open belfry. Four great bells hang overhead, each cast with a ' +
-      'different sign. Ring them in the right order and the tower may give up its secret.',
+      'different sign. Ring them in the order the sheet music decreed.',
     background: 'radial-gradient(ellipse at 50% 30%, #1d2734 0%, #0f161f 60%, #07090d 100%)',
     hotspots: [
-      { id: 'tower-bells', type: 'puzzle', label: 'The Four Bells', icon: '🔔', x: 50, y: 42,
-        puzzleId: 'bell-sequence', description: 'Four bells, each cast with a sign: wolf, moon, dusk, raven.' },
-      { id: 'tower-exit', type: 'exit', label: 'Down to the Chapel', icon: '🪜', x: 84, y: 82,
+      { id: 'bell-wolf', type: 'bell', label: 'Wolf Bell', icon: '🐺', x: 24, y: 52,
+        bellId: 'wolf', note: 55, puzzleId: 'bell-sequence' },
+      { id: 'bell-moon', type: 'bell', label: 'Moon Bell', icon: '🌙', x: 41, y: 52,
+        bellId: 'moon', note: 64, puzzleId: 'bell-sequence' },
+      { id: 'bell-dusk', type: 'bell', label: 'Dusk Bell', icon: '🌆', x: 61, y: 52,
+        bellId: 'dusk', note: 60, puzzleId: 'bell-sequence' },
+      { id: 'bell-raven', type: 'bell', label: 'Raven Bell', icon: '🐦‍⬛', x: 77, y: 52,
+        bellId: 'raven', note: 67, puzzleId: 'bell-sequence' },
+      { id: 'tower-exit', type: 'exit', label: 'Down to the Chapel', icon: '🪜', x: 86, y: 84,
         targetRoomId: 'chapel' },
     ],
   },

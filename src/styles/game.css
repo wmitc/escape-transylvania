@@ -568,29 +568,6 @@
   color: var(--color-text);
 }
 
-/* Sequence (bells) */
-.bell-row {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.bell {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  padding: 0.7rem 0.9rem;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(232, 201, 135, 0.45);
-  border-radius: 8px;
-  color: var(--color-text);
-  cursor: pointer;
-}
-
-.bell:hover {
-  background: rgba(232, 201, 135, 0.12);
-}
-
 /* Weighing (barrels + balance) */
 .barrel-row {
   display: flex;

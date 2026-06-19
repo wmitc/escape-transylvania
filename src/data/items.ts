@@ -29,6 +29,12 @@ export const ITEMS: Record<ItemId, Item> = {
     icon: '📕',
     description: 'A cracked leather book. Strange symbols crowd its margins.',
   },
+  'sheet-music': {
+    id: 'sheet-music',
+    name: 'Sheet Music',
+    icon: '🎼',
+    description: 'Sheet music titled "To Wake the Tower." Ring the bells: Dusk, Raven, Moon, Wolf.',
+  },
   vial: {
     id: 'vial',
     name: 'Crimson Vial',

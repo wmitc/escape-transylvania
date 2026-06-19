@@ -1,5 +1,6 @@
 import type { Hotspot as HotspotType } from '../types'
 import { useGameStore } from '../state/gameStore'
+import { playBell } from '../audio/music'
 
 /**
  * A single clickable region in a room scene. What a click does depends on the
@@ -9,9 +10,11 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
   const collectItem = useGameStore((s) => s.collectItem)
   const insertKey = useGameStore((s) => s.insertKey)
   const applyItem = useGameStore((s) => s.applyItem)
+  const ringBell = useGameStore((s) => s.ringBell)
   const tryExit = useGameStore((s) => s.tryExit)
   const look = useGameStore((s) => s.look)
   const openPuzzle = useGameStore((s) => s.openPuzzle)
+  const soundOn = useGameStore((s) => s.soundOn)
   const filled = useGameStore((s) =>
     hotspot.type === 'keyhole' ? !!s.flags[hotspot.placedFlag] : false,
   )
@@ -32,6 +35,10 @@ export function Hotspot({ hotspot }: { hotspot: HotspotType }) {
         break
       case 'apply':
         applyItem(hotspot.itemId, hotspot.setsFlag, hotspot.revealMessage, hotspot.emptyDescription)
+        break
+      case 'bell':
+        if (soundOn) playBell(hotspot.note)
+        ringBell(hotspot.bellId, hotspot.puzzleId)
         break
       case 'exit':
         tryExit(hotspot)
