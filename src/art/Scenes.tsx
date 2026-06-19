@@ -22,46 +22,53 @@ function Archway({ cx, top = 104 }: { cx: number; top?: number }) {
 }
 
 /**
- * A 2D spiral staircase winding up a central post. Treads alternate to the
- * front (lighter, right of the post) and the back (darker, left), narrowing as
- * they climb to suggest perspective.
+ * A 2D spiral staircase: treads fan out from a central pole to an outer edge
+ * that traces a smooth sine wave (the helix seen from the side). Treads at the
+ * front of the turn (sticking out to the right) are lighter; those at the back
+ * (left, partly behind the pole) are darker.
  */
-function SpiralStair({ cx, baseY = 150, steps = 9 }: { cx: number; baseY?: number; steps?: number }) {
+function SpiralStair({ cx, baseY = 148, steps = 12 }: { cx: number; baseY?: number; steps?: number }) {
+  const stepH = 7.2
+  const amp = 22
+  const phase = (i: number) => Math.sin(i * 0.62)
+  const topY = baseY - (steps - 1) * stepH
+
   const back: ReactElement[] = []
   const front: ReactElement[] = []
-  const tips: [number, number][] = []
   for (let i = 0; i < steps; i++) {
-    const y = baseY - i * 9
-    const right = i % 2 === 0
-    const w = (25 - i * 0.7) * (right ? 1 : -1)
-    const slab = (
+    const y = baseY - i * stepH
+    const s = phase(i)
+    const tipX = cx + amp * s
+    const right = s >= 0
+    // A wedge tread from the pole out to the rail, with a little top-face depth.
+    const tread = (
       <g key={i}>
-        {/* tread top */}
         <path
-          d={`M${cx} ${y} L${cx + w} ${y - 5} L${cx + w} ${y - 1} L${cx} ${y + 4} Z`}
-          fill={right ? '#433c5c' : '#322c48'}
-          stroke="#15121f"
-          strokeWidth="0.8"
+          d={`M${cx} ${y} L${tipX} ${y - 3.5} L${tipX} ${y + 0.5} L${cx} ${y + 4} Z`}
+          fill={right ? '#4a4364' : '#2c2742'}
+          stroke="#14111e"
+          strokeWidth="0.7"
         />
-        {/* riser shadow */}
-        <path d={`M${cx} ${y + 4} L${cx + w} ${y - 1} L${cx + w} ${y + 2} L${cx} ${y + 7} Z`} fill="#15121f" />
+        <path d={`M${cx} ${y + 4} L${tipX} ${y + 0.5} L${tipX} ${y + 2.5} L${cx} ${y + 6} Z`} fill="#14111e" />
       </g>
     )
-    ;(right ? front : back).push(slab)
-    tips.push([cx + w, y - 5])
+    ;(right ? front : back).push(tread)
   }
-  // Handrail weaving through the outer tips — the helix edge.
-  let rail = `M${tips[0][0]} ${tips[0][1]}`
-  for (let i = 1; i < tips.length; i++) {
-    const [, py] = tips[i - 1]
-    const [x, y] = tips[i]
-    rail += ` Q${cx} ${(py + y) / 2} ${x} ${y}`
+
+  // Smooth outer handrail, sampled finely so it reads as one flowing helix edge.
+  const samples = steps * 5
+  let rail = ''
+  for (let s = 0; s <= samples; s++) {
+    const i = (s / samples) * (steps - 1)
+    const x = (cx + amp * phase(i)).toFixed(1)
+    const y = (baseY - i * stepH - 3.5).toFixed(1)
+    rail += `${s === 0 ? 'M' : 'L'}${x} ${y}`
   }
-  const topY = baseY - (steps - 1) * 9
+
   return (
     <g>
       {back}
-      <rect x={cx - 3} y={topY - 4} width="6" height={baseY - topY + 12} fill="#39324e" stroke="#15121f" strokeWidth="1" />
+      <rect x={cx - 2.5} y={topY - 5} width="5" height={baseY - topY + 12} fill="#39324e" stroke="#15121f" strokeWidth="1" />
       {front}
       <path d={rail} fill="none" stroke="#6a6086" strokeWidth="1.6" strokeLinecap="round" opacity="0.9" />
     </g>
@@ -577,7 +584,7 @@ function ChapelScene() {
       {/* spiral staircase up to the tower, right */}
       <g>
         <path d="M246 150 v-82 a30 30 0 0 1 60 0 v82 z" fill="#17131f" stroke="#2c2740" strokeWidth="2" />
-        <SpiralStair cx={276} baseY={148} steps={9} />
+        <SpiralStair cx={276} baseY={148} steps={12} />
       </g>
       <rect x="0" y="152" width="320" height="28" fill="#080610" />
     </svg>
@@ -596,6 +603,12 @@ function BellTowerScene() {
           <stop offset="0" stopColor="#f2f5ff" />
           <stop offset="1" stopColor="#8aa0c8" stopOpacity="0" />
         </radialGradient>
+        {/* dusk sign: deep indigo sky deepening to a warm orange horizon */}
+        <linearGradient id="bt-dusk" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#241f47" />
+          <stop offset="0.55" stopColor="#5a2f55" />
+          <stop offset="1" stopColor="#c25a2e" />
+        </linearGradient>
       </defs>
       <rect width="320" height="180" fill="url(#bt-sky)" />
       {/* open belfry arches showing the night sky + moon */}
@@ -612,11 +625,12 @@ function BellTowerScene() {
       </g>
       {/* heavy wooden support beam */}
       <rect x="24" y="28" width="272" height="9" rx="1" fill="#2a1d14" stroke="#1a120c" strokeWidth="1" />
-      {/* four cast bells hung from ropes on the beam, each engraved with its sign */}
+      {/* four cast bells hung from ropes on the beam, each engraved with its sign.
+          Dusk is a drawn medallion (no emoji reads clearly as "dusk"). */}
       {[
         { x: 78, sign: '🐺' },
         { x: 130, sign: '🌙' },
-        { x: 196, sign: '🌄' },
+        { x: 196, sign: 'dusk' as const },
         { x: 248, sign: '🐦‍⬛' },
       ].map(({ x, sign }) => (
         <g key={x}>
@@ -641,7 +655,19 @@ function BellTowerScene() {
           {/* shading highlight for volume */}
           <path d={`M${x - 11} 98 C${x - 15} 84 ${x - 9} 66 ${x - 4} 61`} fill="none" stroke="#e8c987" strokeWidth="1.6" opacity="0.5" />
           {/* engraved sign on the bell face */}
-          <text x={x} y="82" fontSize="15" textAnchor="middle" dominantBaseline="middle">{sign}</text>
+          {sign === 'dusk' ? (
+            <g>
+              {/* dusk medallion: setting sun under a deepening sky */}
+              <rect x={x - 9} y="75" width="18" height="15" rx="2.5" fill="url(#bt-dusk)" stroke="#3a2c14" strokeWidth="0.8" />
+              <circle cx={x} cy="87" r="4.6" fill="#ef6a2c" />
+              <rect x={x - 9} y="86.5" width="18" height="3.5" rx="0" fill="#1c1626" />
+              <line x1={x - 9} y1="86.5" x2={x + 9} y2="86.5" stroke="#7a3a22" strokeWidth="0.7" />
+              <circle cx={x - 5} cy="79" r="0.8" fill="#e6e9f5" />
+              <circle cx={x + 5} cy="78" r="0.6" fill="#cdd2e8" />
+            </g>
+          ) : (
+            <text x={x} y="82" fontSize="15" textAnchor="middle" dominantBaseline="middle">{sign}</text>
+          )}
           {/* hollow mouth + clapper */}
           <ellipse cx={x} cy="100" rx="17" ry="3.6" fill="#4a3a1a" />
           <circle cx={x} cy="102" r="2.6" fill="#3a2c14" />
