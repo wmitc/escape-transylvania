@@ -137,14 +137,6 @@ function DungeonScene() {
         <path d="M70 0 q-4 12 0 24 q4 12 0 24" />
       </g>
       <circle cx="44" cy="84" r="4" fill="none" stroke="#4a4150" strokeWidth="2.5" />
-      {/* prisoner's tally scratched on the wall — the lock code (2,4,1,3) */}
-      <g stroke="#6a6070" strokeWidth="1.5" opacity="0.85" strokeLinecap="round">
-        {[[0, 2], [16, 4], [40, 1], [50, 3]].map(([gx, n]) =>
-          Array.from({ length: n as number }, (_, i) => (
-            <line key={`${gx}-${i}`} x1={78 + gx + i * 3} y1="84" x2={78 + gx + i * 3} y2="98" />
-          )),
-        )}
-      </g>
       {/* iron cell gate, centre */}
       <g>
         <rect x="120" y="56" width="92" height="104" fill="#0a0812" />
@@ -620,12 +612,12 @@ function BellTowerScene() {
       </g>
       {/* heavy wooden support beam */}
       <rect x="24" y="28" width="272" height="9" rx="1" fill="#2a1d14" stroke="#1a120c" strokeWidth="1" />
-      {/* four cast bells hung from ropes on the beam, each with its sign */}
+      {/* four cast bells hung from ropes on the beam, each engraved with its sign */}
       {[
-        { x: 78, sign: 'wolf' },
-        { x: 130, sign: 'moon' },
-        { x: 196, sign: 'dusk' },
-        { x: 248, sign: 'raven' },
+        { x: 78, sign: '🐺' },
+        { x: 130, sign: '🌙' },
+        { x: 196, sign: '🌄' },
+        { x: 248, sign: '🐦‍⬛' },
       ].map(({ x, sign }) => (
         <g key={x}>
           {/* twisted rope from the beam down to the yoke */}
@@ -639,41 +631,20 @@ function BellTowerScene() {
           <path d={`M${x - 3} 58 a3 3 0 0 1 6 0`} fill="none" stroke="#7a6326" strokeWidth="2" />
           {/* bell body */}
           <path
-            d={`M${x - 17} 98 C${x - 22} 84 ${x - 15} 66 ${x - 8} 61 L${x - 8} 58
-                Q${x} 55 ${x + 8} 58 L${x + 8} 61 C${x + 15} 66 ${x + 22} 84 ${x + 17} 98
-                Q${x} 104 ${x - 17} 98 Z`}
+            d={`M${x - 19} 100 C${x - 24} 84 ${x - 16} 64 ${x - 9} 60 L${x - 9} 57
+                Q${x} 54 ${x + 9} 57 L${x + 9} 60 C${x + 16} 64 ${x + 24} 84 ${x + 19} 100
+                Q${x} 106 ${x - 19} 100 Z`}
             fill="#b8954f"
             stroke="#7a6326"
             strokeWidth="1.2"
           />
           {/* shading highlight for volume */}
-          <path d={`M${x - 9} 96 C${x - 13} 84 ${x - 8} 68 ${x - 3} 62`} fill="none" stroke="#e8c987" strokeWidth="1.6" opacity="0.6" />
+          <path d={`M${x - 11} 98 C${x - 15} 84 ${x - 9} 66 ${x - 4} 61`} fill="none" stroke="#e8c987" strokeWidth="1.6" opacity="0.5" />
+          {/* engraved sign on the bell face */}
+          <text x={x} y="82" fontSize="15" textAnchor="middle" dominantBaseline="middle">{sign}</text>
           {/* hollow mouth + clapper */}
-          <ellipse cx={x} cy="98" rx="15" ry="3.5" fill="#4a3a1a" />
-          <line x1={x} y1="66" x2={x} y2="99" stroke="#5a4a24" strokeWidth="1.4" />
-          <circle cx={x} cy="100" r="2.6" fill="#3a2c14" />
-          {/* sign below the bell */}
-          {sign === 'wolf' && <text x={x} y="124" fontSize="13" textAnchor="middle">🐺</text>}
-          {sign === 'moon' && (
-            <path d={`M${x + 4} 114 a7 7 0 1 1 -6 -11 a5.5 5.5 0 0 0 6 11 z`} fill="#e8e2c0" />
-          )}
-          {sign === 'dusk' && (
-            <g>
-              <circle cx={x} cy="118" r="5.5" fill="#e0894a" />
-              <rect x={x - 9} y="118" width="18" height="6" fill="#0a0d18" />
-              <line x1={x - 11} y1="118" x2={x + 11} y2="118" stroke="#e0894a" strokeWidth="1" />
-            </g>
-          )}
-          {sign === 'raven' && (
-            <g fill="#0b0b12">
-              {/* perched black raven */}
-              <ellipse cx={x - 1} cy="118" rx="7.5" ry="4.2" transform={`rotate(-12 ${x - 1} 118)`} />
-              <circle cx={x + 5} cy="113" r="2.8" />
-              <path d={`M${x + 7} 112 l5 1.4 l-5 1.4 z`} />
-              <path d={`M${x - 8} 119 l-6 2.5 l5 -3.6 z`} />
-              <path d={`M${x - 2} 115 q6 -3 10 0 q-6 1 -10 0 z`} fill="#15151f" />
-            </g>
-          )}
+          <ellipse cx={x} cy="100" rx="17" ry="3.6" fill="#4a3a1a" />
+          <circle cx={x} cy="102" r="2.6" fill="#3a2c14" />
         </g>
       ))}
       <rect x="0" y="150" width="320" height="30" fill="#0a0d18" />

@@ -102,25 +102,30 @@ export type Puzzle =
   | WeighingPuzzle
 
 export const PUZZLES: Record<PuzzleId, Puzzle> = {
-  // Dungeon — pick the four-pin tumbler lock with the nail. The code is the
-  // prisoner's tally scratched on the cell wall (count the clusters).
+  // Dungeon — pick the cell door's lock with the nail by pairing its etched omens.
   'cell-lock': {
     id: 'cell-lock',
-    type: 'combination',
+    type: 'matching',
     title: 'The Cell Door Lock',
     prompt:
-      'A four-pin tumbler lock holds the cell door. Rake each pin to the right depth (0–9). ' +
-      'The depths must be written somewhere — a prisoner does not forget the way out.',
-    length: 4,
-    solution: '2413',
+      'The cell door is held by an old tumbler lock, its face etched with omens. Pair each ' +
+      'omen with its companion to align the pins, then rake them open.',
+    pairs: [
+      { left: '🦇', right: '🌙' },
+      { left: '🕷️', right: '🕸️' },
+      { left: '⚰️', right: '💀' },
+      { left: '🕯️', right: '🔥' },
+      { left: '🧛', right: '🩸' },
+      { left: '🗝️', right: '🔒' },
+    ],
     requiresItemId: 'rusty-nail',
     requiresItemMessage:
       'The lock is jammed tight. You need something thin to rake the pins — a nail, perhaps.',
     flag: 'cell-open',
     rewardItemId: 'crowbar',
     successMessage:
-      'The fourth pin gives with a click and the cell door swings open — and a crowbar that ' +
-      'braced it clatters to the floor.',
+      'The last pin aligns and the cell door swings open — and a crowbar that braced it ' +
+      'clatters to the floor.',
   },
 
   // Catacombs — order the dead by the clues carved above the niches; opens the relic niche.
