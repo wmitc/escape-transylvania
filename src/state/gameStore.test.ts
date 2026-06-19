@@ -50,37 +50,40 @@ describe('solvePuzzle', () => {
   })
 })
 
-describe('openPuzzle', () => {
-  it('refuses to open when a required item is missing', () => {
-    store().openPuzzle('library-cipher') // needs the book
+describe('openPuzzle (select the item, then click the puzzle)', () => {
+  it('refuses to open when the required item is not selected', () => {
+    store().collectItem('library-book', 'book', 'Got the tome.') // held but not selected
+    store().openPuzzle('library-cipher')
     expect(store().activePuzzleId).toBeNull()
-    expect(store().message).toBeTruthy()
   })
 
-  it('opens once the required item is held', () => {
+  it('opens once the required item is selected', () => {
     store().collectItem('library-book', 'book', 'Got the tome.')
+    store().selectItem('book')
     store().openPuzzle('library-cipher')
     expect(store().activePuzzleId).toBe('library-cipher')
   })
 
-  it('the dungeon lockbox needs the rusty nail', () => {
-    store().openPuzzle('cell-lock')
-    expect(store().activePuzzleId).toBeNull()
+  it('the dungeon lockbox needs the rusty nail selected', () => {
     store().collectItem('dungeon-straw', 'rusty-nail', 'Got the nail.')
+    store().openPuzzle('cell-lock')
+    expect(store().activePuzzleId).toBeNull() // held but not selected
+    store().selectItem('rusty-nail')
     store().openPuzzle('cell-lock')
     expect(store().activePuzzleId).toBe('cell-lock')
   })
 })
 
-describe('applyItem (pour the vial into the cauldron)', () => {
-  it('does nothing useful without the vial', () => {
+describe('applyItem (select the vial, then click the cauldron)', () => {
+  it('does nothing when the vial is not selected', () => {
+    store().collectItem('lab-vial', 'vial', 'Got the vial.') // held but not selected
     store().applyItem('vial', 'cauldron-brewed', 'reveal 371', 'you need a draught')
     expect(store().flags['cauldron-brewed']).toBeFalsy()
-    expect(store().message).toBe('you need a draught')
   })
 
-  it('consumes the vial and reveals the clue', () => {
+  it('consumes the vial when selected and reveals the clue', () => {
     store().collectItem('lab-vial', 'vial', 'Got the vial.')
+    store().selectItem('vial')
     store().applyItem('vial', 'cauldron-brewed', 'reveal 371', 'you need a draught')
     expect(store().flags['cauldron-brewed']).toBe(true)
     expect(store().inventory).not.toContain('vial')
@@ -88,15 +91,17 @@ describe('applyItem (pour the vial into the cauldron)', () => {
   })
 })
 
-describe('insertKey', () => {
-  it("won't insert a key you don't hold", () => {
+describe('insertKey (select the key, then click the lock)', () => {
+  it('prompts to select a key when none is selected', () => {
+    store().solvePuzzle('p', ['iron-key']) // held but not selected
     store().insertKey('iron-key', 'iron-set')
     expect(store().flags['iron-set']).toBeFalsy()
-    expect(store().message).toMatch(/don't have/i)
+    expect(store().message).toMatch(/select/i)
   })
 
-  it('moves a held key from the satchel into the lock', () => {
+  it('moves a selected key from the satchel into the lock', () => {
     store().solvePuzzle('p', ['iron-key'])
+    store().selectItem('iron-key')
     store().insertKey('iron-key', 'iron-set')
     expect(store().flags['iron-set']).toBe(true)
     expect(store().inventory).not.toContain('iron-key')
@@ -104,6 +109,7 @@ describe('insertKey', () => {
 
   it('will not re-insert a key already set', () => {
     store().solvePuzzle('p', ['iron-key'])
+    store().selectItem('iron-key')
     store().insertKey('iron-key', 'iron-set')
     store().insertKey('iron-key', 'iron-set')
     expect(store().message).toMatch(/already set/i)
@@ -124,6 +130,7 @@ describe('tryExit (the castle gate)', () => {
   it('wins once all three keys are set', () => {
     KEY_HOLES.forEach(({ keyItemId, placedFlag }, i) => {
       store().solvePuzzle(`p${i}`, [keyItemId])
+      store().selectItem(keyItemId)
       store().insertKey(keyItemId, placedFlag)
     })
     store().tryExit(escapeExit)

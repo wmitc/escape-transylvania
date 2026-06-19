@@ -2,14 +2,13 @@ import { useGameStore } from '../state/gameStore'
 import { ITEMS, REQUIRED_KEYS, KEY_SET_FLAGS } from '../data/items'
 
 /**
- * The player's satchel. Shows collected items (selecting one will let it be used
- * on hotspots in a later PR) and tracks how many of the three keys are held.
+ * The player's satchel. Click an item to select it, then click the object in the
+ * scene you want to use it on. Also tracks how many of the keys are held.
  */
 export function Inventory() {
   const inventory = useGameStore((s) => s.inventory)
   const selectedItemId = useGameStore((s) => s.selectedItemId)
   const selectItem = useGameStore((s) => s.selectItem)
-  const setMessage = useGameStore((s) => s.setMessage)
   const flags = useGameStore((s) => s.flags)
 
   // Count keys obtained, whether still carried or already set in the gate.
@@ -39,12 +38,9 @@ export function Inventory() {
                 <button
                   type="button"
                   className={`inventory__item${selected ? ' is-selected' : ''}`}
-                  onClick={() => {
-                    selectItem(id)
-                    setMessage(selected ? null : item.description)
-                  }}
+                  onClick={() => selectItem(id)}
                   aria-pressed={selected}
-                  title={item.name}
+                  title={item.description}
                 >
                   <span className="inventory__icon" aria-hidden="true">
                     {item.icon}
@@ -57,7 +53,13 @@ export function Inventory() {
         </ul>
       )}
 
-      <p className="inventory__save">Progress saves automatically.</p>
+      {selectedItemId && ITEMS[selectedItemId] ? (
+        <p className="inventory__hint">
+          {ITEMS[selectedItemId].icon} Selected — click the object in the scene to use it.
+        </p>
+      ) : (
+        <p className="inventory__save">Progress saves automatically.</p>
+      )}
     </aside>
   )
 }
