@@ -30,10 +30,6 @@ export const ROOMS: Record<RoomId, Room> = {
     hotspots: [
       { id: 'dungeon-chains', type: 'look', label: 'Iron Chains', icon: '⛓️', x: 14, y: 36,
         description: 'Manacles bolted to the wall. Whoever hung here is long gone.' },
-      { id: 'dungeon-scratches', type: 'look', label: 'Scratches on the Wall', icon: '✒️', x: 30, y: 50,
-        description:
-          'A prisoner before you clawed a tally into the stone, in four clusters: ' +
-          '‖‖  ‖‖‖‖  ‖  ‖‖‖. Beneath it: "the pins, in order, will set me free."' },
       { id: 'dungeon-torch', type: 'item', label: 'Wall Torch', icon: '🔥', x: 82, y: 30,
         itemId: 'torch', description: 'You lift a lit torch from its bracket. The shadows retreat.' },
       { id: 'dungeon-straw', type: 'item', label: 'Pile of Straw', icon: '🌾', x: 33, y: 84,
