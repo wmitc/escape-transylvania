@@ -29,6 +29,8 @@ interface GameState {
   activePuzzleId: PuzzleId | null
   /** Epoch ms when dawn breaks and the game is lost; null until the game starts. */
   deadlineAt: number | null
+  /** Whether background music is on. */
+  soundOn: boolean
   /** Transient feedback line shown to the player. */
   message: string | null
 
@@ -37,6 +39,7 @@ interface GameState {
   ensureTimer: () => void
   penalizeTime: (seconds: number, message: string) => void
   loseGame: () => void
+  toggleSound: () => void
   enterRoom: (roomId: RoomId) => void
   collectItem: (hotspotId: HotspotId, itemId: ItemId, description: string) => void
   insertKey: (keyItemId: ItemId, placedFlag: string) => void
@@ -68,6 +71,7 @@ const initialState = {
   selectedItemId: null as ItemId | null,
   activePuzzleId: null as PuzzleId | null,
   deadlineAt: null as number | null,
+  soundOn: true,
   message: null as string | null,
 }
 
@@ -93,6 +97,8 @@ export const useGameStore = create<GameState>()(
         })),
 
       loseGame: () => set({ phase: 'lost', message: null, activePuzzleId: null }),
+
+      toggleSound: () => set((state) => ({ soundOn: !state.soundOn })),
 
       enterRoom: (roomId) => set({ currentRoomId: roomId, message: null, selectedItemId: null }),
 
@@ -239,7 +245,8 @@ export const useGameStore = create<GameState>()(
 
       hasKey: (itemId) => get().inventory.includes(itemId),
 
-      resetGame: () => set({ ...initialState }),
+      // Reset progress but keep the sound preference.
+      resetGame: () => set((state) => ({ ...initialState, soundOn: state.soundOn })),
     }),
     {
       name: 'escape-transylvania-save',
@@ -252,6 +259,7 @@ export const useGameStore = create<GameState>()(
         solvedPuzzles: state.solvedPuzzles,
         flags: state.flags,
         deadlineAt: state.deadlineAt,
+        soundOn: state.soundOn,
       }),
     },
   ),

@@ -116,6 +116,17 @@ describe('insertKey (select the key, then click the lock)', () => {
   })
 })
 
+describe('sound preference', () => {
+  it('toggles and survives a reset', () => {
+    expect(store().soundOn).toBe(true)
+    store().toggleSound()
+    expect(store().soundOn).toBe(false)
+    store().startGame()
+    store().resetGame()
+    expect(store().soundOn).toBe(false) // preference kept across reset
+  })
+})
+
 describe('the dawn timer', () => {
   it('starts the countdown when the game starts', () => {
     store().startGame()
