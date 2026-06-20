@@ -634,6 +634,16 @@
   margin: 0.5rem 0 0;
 }
 
+.weigh-low {
+  color: var(--color-blood-bright);
+}
+
+.weigh-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
 .hint__toggle {
   display: block;
   margin: 0.9rem auto 0;

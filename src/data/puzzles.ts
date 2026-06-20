@@ -90,6 +90,8 @@ export interface WeighingPuzzle extends PuzzleBase {
   oddIndex: number
   /** True if the odd barrel is heavier than the rest. */
   heavier: boolean
+  /** How many times the balance may be used before you must commit a guess. */
+  maxWeighings: number
 }
 
 export type Puzzle =
@@ -198,17 +200,20 @@ export const PUZZLES: Record<PuzzleId, Puzzle> = {
     successMessage: 'The bells peal in harmony. Something drops from the belfry — a Silver Key.',
   },
 
-  // Wine Cellar — find the one barrel that isn't wine using the balance; it hides the vial.
+  // Wine Cellar — find the one heavy barrel among nine with a limited number of
+  // group weighings, then breach it. (Solvable in 2 weighings: 3 vs 3, then 1 vs 1.)
   'cellar-weighing': {
     id: 'cellar-weighing',
     type: 'weighing',
     title: 'The Odd Barrel',
     prompt:
-      'Six barrels line the wall. Five hold wine and weigh the same; one is heavier — filled ' +
-      'with something else. Use the balance to find the heavy barrel, then breach it.',
-    count: 6,
-    oddIndex: 3,
+      'Nine barrels line the wall. Eight hold wine and weigh the same; one is heavier — filled ' +
+      'with something else. Load any barrels onto each pan of the balance to compare groups, but ' +
+      'the old scale will only bear three weighings before it seizes. Find the heavy barrel, then breach it.',
+    count: 9,
+    oddIndex: 6,
     heavier: true,
+    maxWeighings: 3,
     rewardItemId: 'vial',
     successMessage: 'You stave in the heavy barrel. Nestled in sand is a crimson vial.',
   },

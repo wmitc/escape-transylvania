@@ -125,7 +125,7 @@ export const ROOMS: Record<RoomId, Room> = {
     hotspots: [
       { id: 'chapel-window', type: 'look', label: 'Shattered Window', icon: '🪟', x: 50, y: 24,
         description: 'A rose window, long shattered. Moonlight falls through it onto the altar.' },
-      { id: 'chapel-altar', type: 'puzzle', label: 'The Altar', icon: '⛪', x: 50, y: 60,
+      { id: 'chapel-altar', type: 'puzzle', label: 'The Altar', icon: '⛪', x: 50, y: 54,
         puzzleId: 'chapel-riddle', description: 'A reliquary is set into the altar, sealed by a carved riddle.' },
       { id: 'chapel-to-tower', type: 'exit', label: 'Up to the Bell Tower', icon: '🔔', x: 84, y: 36,
         targetRoomId: 'bell-tower' },
