@@ -227,13 +227,35 @@ function GreatHallScene() {
       <Archway cx={160} />
       <Archway cx={225} />
       <Archway cx={285} />
-      {/* grand portrait, centre */}
+      {/* grand portrait of the Count — a pale, red-eyed, fanged vampire */}
       <g>
         <rect x="126" y="22" width="68" height="80" rx="2" fill="#1a1018" stroke="#b8954f" strokeWidth="4" />
-        <rect x="134" y="30" width="52" height="64" fill="#241526" />
-        <circle cx="160" cy="54" r="13" fill="#cdbfae" />
-        <path d="M147 98 q13 -40 26 0 z" fill="#11060e" />
-        <path d="M150 52 q10 -16 20 0 q-10 6 -20 0 z" fill="#0c0510" />
+        <rect x="134" y="30" width="52" height="64" fill="#1b1226" />
+        {/* high pointed vampire cape collar rising behind the head */}
+        <path d="M138 94 L141 49 L157 80 Z" fill="#08060e" />
+        <path d="M182 94 L179 49 L163 80 Z" fill="#08060e" />
+        {/* cloaked shoulders */}
+        <path d="M137 94 Q160 78 183 94 Z" fill="#0c0914" />
+        {/* pale face */}
+        <ellipse cx="160" cy="58" rx="11" ry="14" fill="#d7cfc0" />
+        {/* gaunt cheek shadow */}
+        <path d="M151 60 Q160 69 169 60 Q160 63 151 60 Z" fill="#b9ad9c" opacity="0.6" />
+        {/* black hair, slicked back to a widow's peak */}
+        <path d="M148 53 Q149 41 160 40 Q171 41 172 53 Q166 47 160 51 Q154 47 148 53 Z" fill="#09090e" />
+        {/* sinister angled brows */}
+        <path d="M152 53.5 L158 55.5" stroke="#09090e" strokeWidth="1.2" strokeLinecap="round" />
+        <path d="M168 53.5 L162 55.5" stroke="#09090e" strokeWidth="1.2" strokeLinecap="round" />
+        {/* glowing red eyes */}
+        <ellipse cx="155.6" cy="57.4" rx="1.9" ry="1.3" fill="#e23b2a" />
+        <ellipse cx="164.4" cy="57.4" rx="1.9" ry="1.3" fill="#e23b2a" />
+        <circle cx="155.6" cy="57.4" r="0.6" fill="#5a0c0c" />
+        <circle cx="164.4" cy="57.4" r="0.6" fill="#5a0c0c" />
+        {/* nose */}
+        <path d="M160 58 L158.6 63 L161.4 63 Z" fill="#bfb3a2" />
+        {/* mouth with bared fangs */}
+        <path d="M155 66 Q160 68.5 165 66" stroke="#5a1518" strokeWidth="1" fill="none" />
+        <path d="M157.2 66.4 L158.1 69.4 L159 66.4 Z" fill="#f4f0e6" />
+        <path d="M161 66.4 L161.9 69.4 L162.8 66.4 Z" fill="#f4f0e6" />
       </g>
       {/* two hanging banners with a crest */}
       {[70, 250].map((x) => (
@@ -569,15 +591,58 @@ function ChapelScene() {
         <line x1="143" y1="25" x2="177" y2="59" />
         <line x1="177" y1="25" x2="143" y2="59" />
       </g>
-      {/* altar with reliquary and black candles */}
+      {/* desecrated altar: stepped stone, blood-red runner, carved cross,
+          reliquary, chalice, skull, and dripping black candles */}
       <g>
-        <rect x="128" y="96" width="64" height="46" fill="#1c1726" stroke="#3a3252" strokeWidth="2" />
-        <rect x="144" y="108" width="32" height="22" rx="1" fill="#0c0a14" stroke="#7a6a9a" strokeWidth="1.5" />
-        <circle cx="160" cy="119" r="2" fill="#b8954f" />
-        {[134, 186].map((x) => (
+        {/* stepped stone base */}
+        <rect x="118" y="138" width="84" height="9" fill="#15121f" stroke="#2a2438" strokeWidth="1" />
+        <rect x="125" y="130" width="70" height="9" fill="#1b1626" stroke="#2e2840" strokeWidth="1" />
+        {/* altar body + overhanging table slab */}
+        <rect x="130" y="100" width="60" height="31" fill="#221b30" stroke="#3a3252" strokeWidth="1.5" />
+        <rect x="126" y="93" width="68" height="8" rx="1" fill="#2c2440" stroke="#3a3252" strokeWidth="1" />
+        {/* carved inverted cross + worn riddle lines on the front face */}
+        <g stroke="#473c5e" strokeWidth="2" strokeLinecap="round">
+          <line x1="160" y1="105" x2="160" y2="126" />
+          <line x1="153" y1="120" x2="167" y2="120" />
+        </g>
+        <g stroke="#352f49" strokeWidth="1" opacity="0.85">
+          <line x1="134" y1="108" x2="146" y2="108" />
+          <line x1="134" y1="113" x2="145" y2="113" />
+          <line x1="134" y1="118" x2="146" y2="118" />
+          <line x1="174" y1="108" x2="186" y2="108" />
+          <line x1="175" y1="113" x2="186" y2="113" />
+          <line x1="174" y1="118" x2="185" y2="118" />
+        </g>
+        {/* blood-red altar runner draped over the slab, gold-trimmed */}
+        <path d="M149 93 H171 V129 L165.5 135 L160 129 L154.5 135 L149 129 Z" fill="#5a1420" stroke="#7c1d2b" strokeWidth="0.8" />
+        <path d="M151 96 H169" stroke="#b8954f" strokeWidth="1" opacity="0.7" />
+        {/* reliquary with a peaked lid (the riddle target) */}
+        <g>
+          <rect x="150" y="83" width="20" height="11" fill="#0c0a14" stroke="#b8954f" strokeWidth="1.3" />
+          <path d="M150 83 L160 77 L170 83 Z" fill="#1a1426" stroke="#b8954f" strokeWidth="1.1" />
+          <circle cx="160" cy="89" r="1.5" fill="#b8954f" />
+        </g>
+        {/* chalice, left */}
+        <g fill="#8a7340">
+          <path d="M137 89 q4.5 6 9 0 z" />
+          <rect x="140.7" y="89" width="1.6" height="5" />
+          <rect x="138" y="94" width="7" height="1.8" rx="0.6" />
+        </g>
+        {/* skull, right */}
+        <g>
+          <circle cx="182" cy="89" r="3.6" fill="#d8d2c2" />
+          <rect x="179.4" y="91" width="5.2" height="3.4" rx="1.2" fill="#d8d2c2" />
+          <circle cx="180.7" cy="89" r="0.9" fill="#0c0a0a" />
+          <circle cx="183.3" cy="89" r="0.9" fill="#0c0a0a" />
+          <line x1="182" y1="91" x2="182" y2="93.5" stroke="#0c0a0a" strokeWidth="0.6" />
+        </g>
+        {/* two black candles with wax drips + warm flames */}
+        {[133, 187].map((x) => (
           <g key={x}>
-            <rect x={x - 2} y="84" width="4" height="14" fill="#15121c" />
-            <path d={`M${x} 76 q-4 5 0 9 q4 -4 0 -9 z`} fill="#f0d9a0" />
+            <rect x={x - 2} y="80" width="4" height="13" fill="#15121c" />
+            <path d={`M${x - 2} 86 q-1.5 4 0 7`} stroke="#3a3550" strokeWidth="1" fill="none" />
+            <path d={`M${x} 72 q-4 5 0 9 q4 -4 0 -9 z`} fill="#f0d9a0" />
+            <path d={`M${x} 75 q-2 3 0 5 q2 -2 0 -5 z`} fill="#e8784a" />
           </g>
         ))}
       </g>
